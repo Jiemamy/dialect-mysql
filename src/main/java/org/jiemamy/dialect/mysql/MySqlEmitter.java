@@ -76,9 +76,13 @@ public class MySqlEmitter extends DefaultSqlEmitter {
 			StorageEngineType engineType = tableModel.getParam(MySqlParameterKeys.STORAGE_ENGINE);
 			if (engineType != null && StringUtils.isEmpty(engineType.toString()) == false) {
 				String engineName = engineType.toString();
-				tokens.add(Keyword.of("ENGINE"));
-				tokens.add(Separator.EQUAL);
-				tokens.add(Keyword.of(engineName));
+				// FORMAT-OFF
+				tokens.addAll(tokens.size() - 1, Arrays.asList(
+						Keyword.of("ENGINE"),
+						Separator.EQUAL,
+						Keyword.of(engineName)
+				));
+				// FORMAT-ON
 			}
 		}
 		

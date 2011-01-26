@@ -31,6 +31,8 @@ import org.slf4j.LoggerFactory;
 import org.jiemamy.JiemamyContext;
 import org.jiemamy.SqlFacet;
 import org.jiemamy.composer.exporter.DefaultSqlExportConfig;
+import org.jiemamy.dialect.mysql.parameter.MySqlParameterKeys;
+import org.jiemamy.dialect.mysql.parameter.StandardEngine;
 import org.jiemamy.model.column.Column;
 import org.jiemamy.model.datatype.DataTypeCategory;
 import org.jiemamy.model.datatype.DefaultTypeReference;
@@ -116,5 +118,36 @@ public class MySqlEmitterTest {
 		assertThat(statements.get(0).toString(), is("DROP TABLE IF EXISTS `T_FOO`;"));
 		assertThat(statements.get(1).toString(),
 				is("CREATE TABLE `T_FOO`(`ID` INTEGER AUTO_INCREMENT, `NAME` VARCHAR(32), `HOGE` INTEGER);"));
+	}
+	
+	/**
+	 * engine指定付の単純なテーブルを1つemitして確認。
+	 * 
+	 * @throws Exception 例外が発生した場合
+	 */
+	@Test
+	public void test03_engine指定付の単純なテーブルを1つemitして確認() throws Exception {
+		DefaultTypeVariant varchar32 = new DefaultTypeVariant(VARCHAR);
+		varchar32.putParam(TypeParameterKey.SIZE, 32);
+		
+		DefaultTypeVariant aiInteger = new DefaultTypeVariant(INTEGER);
+		aiInteger.putParam(TypeParameterKey.SERIAL, true);
+		
+		// FORMAT-OFF
+		DefaultTableModel table = new Table("T_FOO")
+				.with(new Column("ID").whoseTypeIs(aiInteger).build())
+				.with(new Column("NAME").whoseTypeIs(varchar32).build())
+				.with(new Column("HOGE").whoseTypeIs(new DefaultTypeVariant(INTEGER)).build())
+				.build();
+		// FORMAT-ON
+		table.putParam(MySqlParameterKeys.STORAGE_ENGINE, StandardEngine.InnoDB);
+		context.store(table);
+		
+		List<SqlStatement> statements = emitter.emit(context, config);
+		assertThat(statements.size(), is(2));
+		assertThat(statements.get(0).toString(), is("DROP TABLE IF EXISTS `T_FOO`;"));
+		assertThat(
+				statements.get(1).toString(),
+				is("CREATE TABLE `T_FOO`(`ID` INTEGER AUTO_INCREMENT, `NAME` VARCHAR(32), `HOGE` INTEGER)ENGINE=InnoDB;"));
 	}
 }
