@@ -70,7 +70,7 @@ public class MySqlEmitterTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		emitter = new MySqlEmitter();
+		emitter = new MySqlEmitter(new MySqlDialect());
 		
 		config = new DefaultSqlExportConfig();
 		config.setDataSetIndex(-1);

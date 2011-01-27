@@ -152,7 +152,7 @@ public class MySqlDialect extends AbstractDialect {
 	
 	public DatabaseMetadataParser getDatabaseMetadataParser() {
 		// TODO カスタマイズ
-		return new DefaultDatabaseMetadataParser();
+		return new DefaultDatabaseMetadataParser(this);
 	}
 	
 	public String getName() {
@@ -160,7 +160,7 @@ public class MySqlDialect extends AbstractDialect {
 	}
 	
 	public SqlEmitter getSqlEmitter() {
-		return new MySqlEmitter(new MySqlTokenResolver());
+		return new MySqlEmitter(this);
 	}
 	
 	@Override

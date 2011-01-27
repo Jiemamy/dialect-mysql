@@ -27,6 +27,7 @@ import org.apache.commons.lang.StringUtils;
 
 import org.jiemamy.JiemamyContext;
 import org.jiemamy.dialect.DefaultSqlEmitter;
+import org.jiemamy.dialect.Dialect;
 import org.jiemamy.dialect.SqlEmitter;
 import org.jiemamy.dialect.TokenResolver;
 import org.jiemamy.dialect.mysql.internal.MySqlIdentifier;
@@ -50,18 +51,23 @@ public class MySqlEmitter extends DefaultSqlEmitter {
 	
 	/**
 	 * インスタンスを生成する。
+	 * 
+	 * @param dialect {@link Dialect}
+	 * @throws IllegalArgumentException 引数に{@code null}を与えた場合
 	 */
-	public MySqlEmitter() {
-		this(new MySqlTokenResolver());
+	public MySqlEmitter(Dialect dialect) {
+		this(dialect, new MySqlTokenResolver());
 	}
 	
 	/**
 	 * インスタンスを生成する。
 	 * 
-	 * @param tokenResolver
+	 * @param dialect {@link Dialect}
+	 * @param tokenResolver {@link TokenResolver}
+	 * @throws IllegalArgumentException 引数に{@code null}を与えた場合
 	 */
-	protected MySqlEmitter(TokenResolver tokenResolver) {
-		super(tokenResolver);
+	protected MySqlEmitter(Dialect dialect, TokenResolver tokenResolver) {
+		super(dialect, tokenResolver);
 	}
 	
 	@Override
