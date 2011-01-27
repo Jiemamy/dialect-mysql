@@ -41,6 +41,8 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import org.jiemamy.dialect.AbstractDialect;
+import org.jiemamy.dialect.DatabaseMetadataParser;
+import org.jiemamy.dialect.DefaultDatabaseMetadataParser;
 import org.jiemamy.dialect.SqlEmitter;
 import org.jiemamy.dialect.TypeParameterSpec;
 import org.jiemamy.dialect.TypeParameterSpec.Necessity;
@@ -146,6 +148,11 @@ public class MySqlDialect extends AbstractDialect {
 	 */
 	public MySqlDialect() {
 		super("jdbc:mysql://localhost:3306/", typeEntries);
+	}
+	
+	public DatabaseMetadataParser getDatabaseMetadataParser() {
+		// TODO カスタマイズ
+		return new DefaultDatabaseMetadataParser();
 	}
 	
 	public String getName() {
