@@ -21,19 +21,21 @@ package org.jiemamy.dialect.mysql.internal;
 import org.jiemamy.model.sql.Keyword;
 
 /**
- * TODO for daisuke
+ * MySQL用の（トークンとしての）キーワード。
  * 
  * @version $Id$
  * @author daisuke
  */
-public final class MySqlKeyword {
+public final class MySqlKeywords {
 	
-	public static Keyword UNSIGNED = Keyword.of("UNSIGNED");
+	/** UNSIGNED */
+	public static final Keyword UNSIGNED = Keyword.of("UNSIGNED");
 	
-	public static Keyword AUTO_INCREMENT = Keyword.of("AUTO_INCREMENT");
+	/** AUTO_INCREMENT */
+	public static final Keyword AUTO_INCREMENT = Keyword.of("AUTO_INCREMENT");
 	
 
-	private MySqlKeyword() {
+	private MySqlKeywords() {
 	}
 	
 }

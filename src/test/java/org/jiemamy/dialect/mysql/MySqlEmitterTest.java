@@ -50,6 +50,7 @@ import org.jiemamy.model.table.Table;
  */
 public class MySqlEmitterTest {
 	
+	@SuppressWarnings("unused")
 	private static Logger logger = LoggerFactory.getLogger(MySqlEmitterTest.class);
 	
 	private static final TypeReference INTEGER = new DefaultTypeReference(DataTypeCategory.INTEGER, "INTEGER", "int4");

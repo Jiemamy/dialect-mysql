@@ -30,12 +30,15 @@ import org.jiemamy.model.table.TableParameterKey;
  */
 public final class MySqlParameterKeys {
 	
+	/** UNSIGNEDパラメータ用のキー */
 	public static final TypeParameterKey<Boolean> UNSIGNED = new TypeParameterKey<Boolean>(Converters.BOOLEAN,
 			"org.jiemamy.dialect.mysql.unsigned");
 	
+	/** CHARSETパラメータ用のキー */
 	public static final TypeParameterKey<String> CHARSET = new TypeParameterKey<String>(Converters.STRING,
 			"org.jiemamy.dialect.mysql.charset");
 	
+	/** ストレージエンジンパラメータ用のキー */
 	public static final TableParameterKey<StorageEngineType> STORAGE_ENGINE = new TableParameterKey<StorageEngineType>(
 			new Converter<StorageEngineType>() {
 				

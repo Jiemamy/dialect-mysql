@@ -22,7 +22,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.jiemamy.dialect.DefaultTokenResolver;
-import org.jiemamy.dialect.mysql.internal.MySqlKeyword;
+import org.jiemamy.dialect.mysql.internal.MySqlKeywords;
 import org.jiemamy.dialect.mysql.parameter.MySqlParameterKeys;
 import org.jiemamy.model.constraint.DeferrabilityModel.InitiallyCheckTime;
 import org.jiemamy.model.datatype.TypeParameterKey;
@@ -52,12 +52,12 @@ public class MySqlTokenResolver extends DefaultTokenResolver {
 		
 		Boolean unsigned = type.getParam(MySqlParameterKeys.UNSIGNED);
 		if (unsigned != null && unsigned) {
-			resolved.add(0, MySqlKeyword.UNSIGNED);
+			resolved.add(0, MySqlKeywords.UNSIGNED);
 		}
 		
 		Boolean serial = type.getParam(TypeParameterKey.SERIAL);
 		if (serial != null && serial) {
-			resolved.add(MySqlKeyword.AUTO_INCREMENT);
+			resolved.add(MySqlKeywords.AUTO_INCREMENT);
 		}
 		
 		return resolved;

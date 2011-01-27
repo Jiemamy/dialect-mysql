@@ -18,30 +18,22 @@
  */
 package org.jiemamy.dialect.mysql;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
-
 import javax.sql.DataSource;
 import javax.sql.XADataSource;
 
-import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 
 import org.jiemamy.DefaultContextMetadata;
 import org.jiemamy.JiemamyContext;
 import org.jiemamy.dialect.AbstractDialectTest;
 import org.jiemamy.dialect.Dialect;
-import org.jiemamy.model.datatype.DataTypeCategory;
 
 /**
  * {@link MySqlDialect}のテストクラス。
  * 
  * @author daisuke
  */
-public class MySqlDialectTest  extends AbstractDialectTest {
+public class MySqlDialectTest extends AbstractDialectTest {
 	
 	/** {@link XADataSource} */
 	public XADataSource xaDataSource;
