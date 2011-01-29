@@ -83,9 +83,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>postgresql</groupId>
-      <artifactId>postgresql</artifactId>
-      <version>8.3-603.jdbc3</version>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>5.0.4</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -103,6 +103,12 @@
       <artifactId>jiemamy-core</artifactId>
       <version>${project.version}</version>
       <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jiemamy.test</groupId>
+      <artifactId>jiemamy-test-helper</artifactId>
+      <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
