@@ -124,13 +124,11 @@ public class MySqlDatabaseTest extends AbstractDatabaseTest {
 	}
 	
 	@Override
-	protected String getPropertiesFilePath() {
-		return "mysql_local.properties";
-	}
-	
-	@Override
-	protected String getPropertiesFilePathForCI() {
-		return "mysql_griffon.properties";
+	protected String getPropertiesFilePath(String hostName) {
+		if (hostName.equals("griffon.jiemamy.org")) {
+			return "/mysql_griffon.properties";
+		}
+		return "/mysql_local.properties";
 	}
 	
 	private DefaultDatabaseImportConfig newImportConfig() throws MalformedURLException {
