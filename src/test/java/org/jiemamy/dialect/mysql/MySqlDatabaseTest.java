@@ -55,6 +55,8 @@ import org.jiemamy.utils.sql.SqlExecutor;
 public class MySqlDatabaseTest extends AbstractDatabaseTest {
 	
 	private static Logger logger = LoggerFactory.getLogger(MySqlDatabaseTest.class);
+	
+
 	/**
 	 * TODO for daisuke
 	 * 
@@ -92,8 +94,7 @@ public class MySqlDatabaseTest extends AbstractDatabaseTest {
 		config.setOutputFile(outFile);
 		config.setOverwrite(true);
 		
-		new SqlExporter().exportModel(TestModelBuilders.EMP_DEPT.getBuiltModel(MySqlDialect.class.getName()),
-				config);
+		new SqlExporter().exportModel(TestModelBuilders.EMP_DEPT.getBuiltModel(MySqlDialect.class.getName()), config);
 		
 		// execute
 		Connection connection = null;
@@ -122,18 +123,27 @@ public class MySqlDatabaseTest extends AbstractDatabaseTest {
 		assertThat(context2.getDatabaseObjects().size(), is(0));
 	}
 	
+	@Override
+	protected String getPropertiesFilePath() {
+		return "mysql_local.properties";
+	}
+	
+	@Override
+	protected String getPropertiesFilePathForCI() {
+		return "mysql_griffon.properties";
+	}
+	
 	private DefaultDatabaseImportConfig newImportConfig() throws MalformedURLException {
 		DefaultDatabaseImportConfig config = new DefaultDatabaseImportConfig();
 		config.setDialect(new MySqlDialect());
-		config.setDriverClassName(getDriverClassName());
 		config.setDriverJarPaths(new URL[] {
 			new File(getJarPath()).toURL()
 		});
-		config.setPassword(getPassword());
-		config.setSchema("public");
+		config.setDriverClassName(getDriverClassName());
 		config.setUri(getConnectionUri());
 		config.setUsername(getUsername());
+		config.setPassword(getPassword());
 		return config;
 	}
-
+	
 }
