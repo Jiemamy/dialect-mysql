@@ -24,8 +24,6 @@ import static org.junit.Assert.assertThat;
 
 import java.io.File;
 import java.io.FileReader;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.sql.Connection;
 import java.util.Set;
 
@@ -40,9 +38,8 @@ import org.jiemamy.JiemamyContext;
 import org.jiemamy.composer.exporter.DefaultSqlExportConfig;
 import org.jiemamy.composer.exporter.SqlExporter;
 import org.jiemamy.composer.importer.DatabaseImporter;
-import org.jiemamy.composer.importer.DefaultDatabaseImportConfig;
 import org.jiemamy.model.DatabaseObjectModel;
-import org.jiemamy.test.AbstractDatabaseTest;
+import org.jiemamy.test.MySqlDatabaseTest;
 import org.jiemamy.test.TestModelBuilders;
 import org.jiemamy.utils.sql.SqlExecutor;
 
@@ -52,9 +49,9 @@ import org.jiemamy.utils.sql.SqlExecutor;
  * @version $Id$
  * @author daisuke
  */
-public class MySqlDatabaseTest extends AbstractDatabaseTest {
+public class MySqlDatabaseIntegrationTest extends MySqlDatabaseTest {
 	
-	private static Logger logger = LoggerFactory.getLogger(MySqlDatabaseTest.class);
+	private static Logger logger = LoggerFactory.getLogger(MySqlDatabaseIntegrationTest.class);
 	
 
 	/**
@@ -122,26 +119,4 @@ public class MySqlDatabaseTest extends AbstractDatabaseTest {
 		assertThat(new DatabaseImporter().importModel(context2, newImportConfig()), is(true));
 		assertThat(context2.getDatabaseObjects().size(), is(0));
 	}
-	
-	@Override
-	protected String getPropertiesFilePath(String hostName) {
-		if (hostName.equals("griffon.jiemamy.org")) {
-			return "/mysql_griffon.properties";
-		}
-		return "/mysql_local.properties";
-	}
-	
-	private DefaultDatabaseImportConfig newImportConfig() throws MalformedURLException {
-		DefaultDatabaseImportConfig config = new DefaultDatabaseImportConfig();
-		config.setDialect(new MySqlDialect());
-		config.setDriverJarPaths(new URL[] {
-			new File(getJarPath()).toURL()
-		});
-		config.setDriverClassName(getDriverClassName());
-		config.setUri(getConnectionUri());
-		config.setUsername(getUsername());
-		config.setPassword(getPassword());
-		return config;
-	}
-	
 }
