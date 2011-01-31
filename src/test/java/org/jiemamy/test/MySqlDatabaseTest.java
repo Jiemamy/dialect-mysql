@@ -31,7 +31,7 @@ import org.jiemamy.dialect.mysql.MySqlDialect;
  * @version $Id$
  * @author daisuke
  */
-public class MySqlDatabaseTest extends AbstractDatabaseTest {
+public abstract class MySqlDatabaseTest extends AbstractDatabaseTest {
 	
 	@Override
 	protected String getPropertiesFilePath(String hostName) {
