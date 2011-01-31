@@ -26,7 +26,7 @@ import org.jiemamy.dialect.mysql.internal.MySqlKeywords;
 import org.jiemamy.dialect.mysql.parameter.MySqlParameterKeys;
 import org.jiemamy.model.constraint.DeferrabilityModel.InitiallyCheckTime;
 import org.jiemamy.model.datatype.TypeParameterKey;
-import org.jiemamy.model.datatype.TypeVariant;
+import org.jiemamy.model.datatype.DataType;
 import org.jiemamy.model.sql.Token;
 
 /**
@@ -47,7 +47,7 @@ public class MySqlTokenResolver extends DefaultTokenResolver {
 	}
 	
 	@Override
-	protected List<Token> resolveType(TypeVariant type) {
+	protected List<Token> resolveType(DataType type) {
 		List<Token> resolved = super.resolveType(type);
 		
 		Boolean unsigned = type.getParam(MySqlParameterKeys.UNSIGNED);
