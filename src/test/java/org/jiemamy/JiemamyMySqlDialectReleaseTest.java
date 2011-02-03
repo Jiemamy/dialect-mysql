@@ -29,6 +29,7 @@ import java.util.Collection;
 import com.google.common.collect.Lists;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +40,7 @@ import org.slf4j.LoggerFactory;
  * @version $Id$
  * @author daisuke
  */
-//@Ignore
+@Ignore
 public class JiemamyMySqlDialectReleaseTest {
 	
 	private static Logger logger = LoggerFactory.getLogger(JiemamyMySqlDialectReleaseTest.class);
