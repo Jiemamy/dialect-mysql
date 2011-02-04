@@ -107,9 +107,9 @@ public class MySqlEmitterTest {
 		
 		// FORMAT-OFF
 		DefaultTableModel table = new Table("T_FOO")
-				.with(new Column("ID").whoseTypeIs(aiInteger).build())
-				.with(new Column("NAME").whoseTypeIs(varchar32).build())
-				.with(new Column("HOGE").whoseTypeIs(new DefaultDataType(INTEGER)).build())
+				.with(new Column("ID").type(aiInteger).build())
+				.with(new Column("NAME").type(varchar32).build())
+				.with(new Column("HOGE").type(new DefaultDataType(INTEGER)).build())
 				.build();
 		// FORMAT-ON
 		context.store(table);
@@ -136,9 +136,9 @@ public class MySqlEmitterTest {
 		
 		// FORMAT-OFF
 		DefaultTableModel table = new Table("T_FOO")
-				.with(new Column("ID").whoseTypeIs(aiInteger).build())
-				.with(new Column("NAME").whoseTypeIs(varchar32).build())
-				.with(new Column("HOGE").whoseTypeIs(new DefaultDataType(INTEGER)).build())
+				.with(new Column("ID").type(aiInteger).build())
+				.with(new Column("NAME").type(varchar32).build())
+				.with(new Column("HOGE").type(new DefaultDataType(INTEGER)).build())
 				.build();
 		// FORMAT-ON
 		table.putParam(MySqlParameterKeys.STORAGE_ENGINE, StandardEngine.InnoDB);
