@@ -151,7 +151,7 @@ public class MySqlDialect extends AbstractDialect {
 	}
 	
 	public DatabaseMetadataParser getDatabaseMetadataParser() {
-		// TODO カスタマイズ
+		// TODO カスタマイズ for [DMYS-2]
 		return new DefaultDatabaseMetadataParser(this);
 	}
 	
