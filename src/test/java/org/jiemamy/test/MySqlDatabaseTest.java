@@ -22,7 +22,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.jiemamy.composer.importer.DefaultDatabaseImportConfig;
+import org.jiemamy.composer.importer.SimpleDbImportConfig;
 import org.jiemamy.dialect.mysql.MySqlDialect;
 
 /**
@@ -41,8 +41,8 @@ public abstract class MySqlDatabaseTest extends AbstractDatabaseTest {
 		return "/mysql_local.properties";
 	}
 	
-	protected DefaultDatabaseImportConfig newImportConfig() {
-		DefaultDatabaseImportConfig config = new DefaultDatabaseImportConfig();
+	protected SimpleDbImportConfig newImportConfig() {
+		SimpleDbImportConfig config = new SimpleDbImportConfig();
 		config.setDialect(new MySqlDialect());
 		try {
 			config.setDriverJarPaths(new URL[] {

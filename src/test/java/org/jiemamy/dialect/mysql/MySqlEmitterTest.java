@@ -30,18 +30,18 @@ import org.slf4j.LoggerFactory;
 
 import org.jiemamy.JiemamyContext;
 import org.jiemamy.SqlFacet;
-import org.jiemamy.composer.exporter.DefaultSqlExportConfig;
+import org.jiemamy.composer.exporter.SimpleSqlExportConfig;
 import org.jiemamy.dialect.mysql.parameter.MySqlParameterKeys;
 import org.jiemamy.dialect.mysql.parameter.StandardEngine;
-import org.jiemamy.model.column.Column;
-import org.jiemamy.model.datatype.DataTypeCategory;
-import org.jiemamy.model.datatype.DefaultTypeReference;
-import org.jiemamy.model.datatype.DefaultDataType;
+import org.jiemamy.model.column.JmColumnBuilder;
+import org.jiemamy.model.datatype.RawTypeCategory;
+import org.jiemamy.model.datatype.RawTypeDescriptor;
+import org.jiemamy.model.datatype.SimpleDataType;
+import org.jiemamy.model.datatype.SimpleRawTypeDescriptor;
 import org.jiemamy.model.datatype.TypeParameterKey;
-import org.jiemamy.model.datatype.TypeReference;
 import org.jiemamy.model.sql.SqlStatement;
-import org.jiemamy.model.table.DefaultTableModel;
-import org.jiemamy.model.table.Table;
+import org.jiemamy.model.table.JmTableBuilder;
+import org.jiemamy.model.table.SimpleJmTable;
 
 /**
  * {@link MySqlEmitter}のテストクラス。
@@ -53,13 +53,14 @@ public class MySqlEmitterTest {
 	@SuppressWarnings("unused")
 	private static Logger logger = LoggerFactory.getLogger(MySqlEmitterTest.class);
 	
-	private static final TypeReference INTEGER = new DefaultTypeReference(DataTypeCategory.INTEGER, "INTEGER", "int4");
+	private static final RawTypeDescriptor INTEGER = new SimpleRawTypeDescriptor(RawTypeCategory.INTEGER, "INTEGER",
+			"int4");
 	
-	private static final TypeReference VARCHAR = new DefaultTypeReference(DataTypeCategory.VARCHAR);
+	private static final RawTypeDescriptor VARCHAR = new SimpleRawTypeDescriptor(RawTypeCategory.VARCHAR);
 	
 	private MySqlEmitter emitter;
 	
-	private DefaultSqlExportConfig config;
+	private SimpleSqlExportConfig config;
 	
 	private JiemamyContext context;
 	
@@ -73,7 +74,7 @@ public class MySqlEmitterTest {
 	public void setUp() throws Exception {
 		emitter = new MySqlEmitter(new MySqlDialect());
 		
-		config = new DefaultSqlExportConfig();
+		config = new SimpleSqlExportConfig();
 		config.setDataSetIndex(-1);
 		config.setEmitCreateSchema(true);
 		config.setEmitDropStatements(true);
@@ -99,17 +100,17 @@ public class MySqlEmitterTest {
 	 */
 	@Test
 	public void test02_単純なテーブルを1つemitして確認() throws Exception {
-		DefaultDataType varchar32 = new DefaultDataType(VARCHAR);
+		SimpleDataType varchar32 = new SimpleDataType(VARCHAR);
 		varchar32.putParam(TypeParameterKey.SIZE, 32);
 		
-		DefaultDataType aiInteger = new DefaultDataType(INTEGER);
+		SimpleDataType aiInteger = new SimpleDataType(INTEGER);
 		aiInteger.putParam(TypeParameterKey.SERIAL, true);
 		
 		// FORMAT-OFF
-		DefaultTableModel table = new Table("T_FOO")
-				.with(new Column("ID").type(aiInteger).build())
-				.with(new Column("NAME").type(varchar32).build())
-				.with(new Column("HOGE").type(new DefaultDataType(INTEGER)).build())
+		SimpleJmTable table = new JmTableBuilder("T_FOO")
+				.with(new JmColumnBuilder("ID").type(aiInteger).build())
+				.with(new JmColumnBuilder("NAME").type(varchar32).build())
+				.with(new JmColumnBuilder("HOGE").type(new SimpleDataType(INTEGER)).build())
 				.build();
 		// FORMAT-ON
 		context.store(table);
@@ -128,17 +129,17 @@ public class MySqlEmitterTest {
 	 */
 	@Test
 	public void test03_engine指定付の単純なテーブルを1つemitして確認() throws Exception {
-		DefaultDataType varchar32 = new DefaultDataType(VARCHAR);
+		SimpleDataType varchar32 = new SimpleDataType(VARCHAR);
 		varchar32.putParam(TypeParameterKey.SIZE, 32);
 		
-		DefaultDataType aiInteger = new DefaultDataType(INTEGER);
+		SimpleDataType aiInteger = new SimpleDataType(INTEGER);
 		aiInteger.putParam(TypeParameterKey.SERIAL, true);
 		
 		// FORMAT-OFF
-		DefaultTableModel table = new Table("T_FOO")
-				.with(new Column("ID").type(aiInteger).build())
-				.with(new Column("NAME").type(varchar32).build())
-				.with(new Column("HOGE").type(new DefaultDataType(INTEGER)).build())
+		SimpleJmTable table = new JmTableBuilder("T_FOO")
+				.with(new JmColumnBuilder("ID").type(aiInteger).build())
+				.with(new JmColumnBuilder("NAME").type(varchar32).build())
+				.with(new JmColumnBuilder("HOGE").type(new SimpleDataType(INTEGER)).build())
 				.build();
 		// FORMAT-ON
 		table.putParam(MySqlParameterKeys.STORAGE_ENGINE, StandardEngine.InnoDB);

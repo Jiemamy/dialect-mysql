@@ -23,8 +23,8 @@ import javax.sql.XADataSource;
 
 import org.junit.Before;
 
-import org.jiemamy.DefaultContextMetadata;
 import org.jiemamy.JiemamyContext;
+import org.jiemamy.SimpleJmMetadata;
 import org.jiemamy.dialect.AbstractDialectTest;
 import org.jiemamy.dialect.Dialect;
 
@@ -54,7 +54,7 @@ public class MySqlDialectTest extends AbstractDialectTest {
 	@Before
 	public void setUp() throws Exception {
 		context = new JiemamyContext();
-		DefaultContextMetadata meta = new DefaultContextMetadata();
+		SimpleJmMetadata meta = new SimpleJmMetadata();
 		meta.setDialectClassName(MySqlDialect.class.getName());
 		context.setMetadata(meta);
 		dialect = context.findDialect();

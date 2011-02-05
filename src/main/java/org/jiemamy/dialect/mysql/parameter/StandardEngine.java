@@ -18,7 +18,6 @@
  */
 package org.jiemamy.dialect.mysql.parameter;
 
-
 /**
  * MySQLのストレージエンジンを表す列挙型。
  * 

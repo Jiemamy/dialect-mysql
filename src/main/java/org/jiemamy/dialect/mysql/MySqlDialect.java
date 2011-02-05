@@ -18,22 +18,22 @@
  */
 package org.jiemamy.dialect.mysql;
 
-import static org.jiemamy.model.datatype.DataTypeCategory.BIT;
-import static org.jiemamy.model.datatype.DataTypeCategory.BLOB;
-import static org.jiemamy.model.datatype.DataTypeCategory.CHARACTER;
-import static org.jiemamy.model.datatype.DataTypeCategory.CLOB;
-import static org.jiemamy.model.datatype.DataTypeCategory.DATE;
-import static org.jiemamy.model.datatype.DataTypeCategory.DECIMAL;
-import static org.jiemamy.model.datatype.DataTypeCategory.DOUBLE;
-import static org.jiemamy.model.datatype.DataTypeCategory.FLOAT;
-import static org.jiemamy.model.datatype.DataTypeCategory.INTEGER;
-import static org.jiemamy.model.datatype.DataTypeCategory.NUMERIC;
-import static org.jiemamy.model.datatype.DataTypeCategory.OTHER;
-import static org.jiemamy.model.datatype.DataTypeCategory.REAL;
-import static org.jiemamy.model.datatype.DataTypeCategory.SMALLINT;
-import static org.jiemamy.model.datatype.DataTypeCategory.TIME;
-import static org.jiemamy.model.datatype.DataTypeCategory.TIMESTAMP;
-import static org.jiemamy.model.datatype.DataTypeCategory.VARCHAR;
+import static org.jiemamy.model.datatype.RawTypeCategory.BIT;
+import static org.jiemamy.model.datatype.RawTypeCategory.BLOB;
+import static org.jiemamy.model.datatype.RawTypeCategory.CHARACTER;
+import static org.jiemamy.model.datatype.RawTypeCategory.CLOB;
+import static org.jiemamy.model.datatype.RawTypeCategory.DATE;
+import static org.jiemamy.model.datatype.RawTypeCategory.DECIMAL;
+import static org.jiemamy.model.datatype.RawTypeCategory.DOUBLE;
+import static org.jiemamy.model.datatype.RawTypeCategory.FLOAT;
+import static org.jiemamy.model.datatype.RawTypeCategory.INTEGER;
+import static org.jiemamy.model.datatype.RawTypeCategory.NUMERIC;
+import static org.jiemamy.model.datatype.RawTypeCategory.OTHER;
+import static org.jiemamy.model.datatype.RawTypeCategory.REAL;
+import static org.jiemamy.model.datatype.RawTypeCategory.SMALLINT;
+import static org.jiemamy.model.datatype.RawTypeCategory.TIME;
+import static org.jiemamy.model.datatype.RawTypeCategory.TIMESTAMP;
+import static org.jiemamy.model.datatype.RawTypeCategory.VARCHAR;
 
 import java.util.Arrays;
 import java.util.List;
@@ -47,7 +47,7 @@ import org.jiemamy.dialect.SqlEmitter;
 import org.jiemamy.dialect.TypeParameterSpec;
 import org.jiemamy.dialect.TypeParameterSpec.Necessity;
 import org.jiemamy.dialect.mysql.parameter.MySqlParameterKeys;
-import org.jiemamy.model.datatype.DefaultTypeReference;
+import org.jiemamy.model.datatype.SimpleRawTypeDescriptor;
 import org.jiemamy.model.datatype.TypeParameterKey;
 import org.jiemamy.validator.CompositeValidator;
 import org.jiemamy.validator.Validator;
@@ -63,82 +63,82 @@ public class MySqlDialect extends AbstractDialect {
 	
 	static {
 		// FORMAT-OFF
-		typeEntries.add(new Entry(new DefaultTypeReference(INTEGER), Arrays.asList(
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(INTEGER), Arrays.asList(
 				new TypeParameterSpec(TypeParameterKey.SIZE, Necessity.OPTIONAL),
 				new TypeParameterSpec(TypeParameterKey.SERIAL, Necessity.OPTIONAL),
 				new TypeParameterSpec(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL)
 		)));
-		typeEntries.add(new Entry(new DefaultTypeReference(INTEGER, "MEDIUMINT"), Arrays.asList(
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(INTEGER, "MEDIUMINT"), Arrays.asList(
 				new TypeParameterSpec(TypeParameterKey.SIZE, Necessity.OPTIONAL),
 				new TypeParameterSpec(TypeParameterKey.SERIAL, Necessity.OPTIONAL),
 				new TypeParameterSpec(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL)
 		)));
-		typeEntries.add(new Entry(new DefaultTypeReference(INTEGER, "BIGINT"), Arrays.asList(
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(INTEGER, "BIGINT"), Arrays.asList(
 				new TypeParameterSpec(TypeParameterKey.SIZE, Necessity.OPTIONAL),
 				new TypeParameterSpec(TypeParameterKey.SERIAL, Necessity.OPTIONAL),
 				new TypeParameterSpec(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL)
 		)));
-		typeEntries.add(new Entry(new DefaultTypeReference(SMALLINT), Arrays.asList(
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(SMALLINT), Arrays.asList(
 				new TypeParameterSpec(TypeParameterKey.SIZE, Necessity.OPTIONAL),
 				new TypeParameterSpec(TypeParameterKey.SERIAL, Necessity.OPTIONAL),
 				new TypeParameterSpec(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL)
 		)));
-		typeEntries.add(new Entry(new DefaultTypeReference(SMALLINT, "TINYINT"), Arrays.asList(
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(SMALLINT, "TINYINT"), Arrays.asList(
 				new TypeParameterSpec(TypeParameterKey.SIZE, Necessity.OPTIONAL),
 				new TypeParameterSpec(TypeParameterKey.SERIAL, Necessity.OPTIONAL),
 				new TypeParameterSpec(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL)
 		)));
-		typeEntries.add(new Entry(new DefaultTypeReference(NUMERIC), Arrays.asList(
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(NUMERIC), Arrays.asList(
 				new TypeParameterSpec(TypeParameterKey.PRECISION, Necessity.REQUIRED),
 				new TypeParameterSpec(TypeParameterKey.SCALE, Necessity.REQUIRED),
 				new TypeParameterSpec(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL)
 		)));
-		typeEntries.add(new Entry(new DefaultTypeReference(DECIMAL), Arrays.asList(
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(DECIMAL), Arrays.asList(
 				new TypeParameterSpec(TypeParameterKey.PRECISION, Necessity.REQUIRED),
 				new TypeParameterSpec(TypeParameterKey.SCALE, Necessity.REQUIRED),
 				new TypeParameterSpec(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL)
 		)));
-		typeEntries.add(new Entry(new DefaultTypeReference(FLOAT), Arrays.asList(
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(FLOAT), Arrays.asList(
 				new TypeParameterSpec(TypeParameterKey.PRECISION, Necessity.REQUIRED),
 				new TypeParameterSpec(TypeParameterKey.SCALE, Necessity.REQUIRED),
 				new TypeParameterSpec(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL)
 		)));
-		typeEntries.add(new Entry(new DefaultTypeReference(REAL), Arrays.asList(
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(REAL), Arrays.asList(
 				new TypeParameterSpec(TypeParameterKey.PRECISION, Necessity.REQUIRED),
 				new TypeParameterSpec(TypeParameterKey.SCALE, Necessity.REQUIRED),
 				new TypeParameterSpec(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL)
 		)));
-		typeEntries.add(new Entry(new DefaultTypeReference(DOUBLE), Arrays.asList(
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(DOUBLE), Arrays.asList(
 				new TypeParameterSpec(TypeParameterKey.PRECISION, Necessity.REQUIRED),
 				new TypeParameterSpec(TypeParameterKey.SCALE, Necessity.REQUIRED),
 				new TypeParameterSpec(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL)
 		)));
-		typeEntries.add(new Entry(new DefaultTypeReference(BIT), Arrays.asList(
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(BIT), Arrays.asList(
 				new TypeParameterSpec(TypeParameterKey.SIZE, Necessity.REQUIRED)
 		)));
-		typeEntries.add(new Entry(new DefaultTypeReference(CHARACTER), Arrays.asList(
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(CHARACTER), Arrays.asList(
 				new TypeParameterSpec(TypeParameterKey.SIZE, Necessity.REQUIRED)
 		)));
-		typeEntries.add(new Entry(new DefaultTypeReference(VARCHAR), Arrays.asList(
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(VARCHAR), Arrays.asList(
 				new TypeParameterSpec(TypeParameterKey.SIZE, Necessity.REQUIRED)
 		)));
-		typeEntries.add(new Entry(new DefaultTypeReference(CLOB, "TEXT")));
-		typeEntries.add(new Entry(new DefaultTypeReference(CLOB, "TINYTEXT")));
-		typeEntries.add(new Entry(new DefaultTypeReference(CLOB, "MEDIUMTEXT")));
-		typeEntries.add(new Entry(new DefaultTypeReference(CLOB, "LONGTEXT")));
-		typeEntries.add(new Entry(new DefaultTypeReference(BLOB)));
-		typeEntries.add(new Entry(new DefaultTypeReference(BLOB, "TINYBLOB")));
-		typeEntries.add(new Entry(new DefaultTypeReference(BLOB, "MEDIUMBLOB")));
-		typeEntries.add(new Entry(new DefaultTypeReference(BLOB, "LONGBLOB")));
-		typeEntries.add(new Entry(new DefaultTypeReference(DATE)));
-		typeEntries.add(new Entry(new DefaultTypeReference(TIME)));
-		typeEntries.add(new Entry(new DefaultTypeReference(TIMESTAMP)));
-		typeEntries.add(new Entry(new DefaultTypeReference(TIMESTAMP, "DATETIME")));
-		typeEntries.add(new Entry(new DefaultTypeReference(INTEGER, "YEAR")));
-		typeEntries.add(new Entry(new DefaultTypeReference(OTHER, "BINARY")));
-		typeEntries.add(new Entry(new DefaultTypeReference(OTHER, "VARBINARY")));
-		typeEntries.add(new Entry(new DefaultTypeReference(OTHER, "ENUM")));
-		typeEntries.add(new Entry(new DefaultTypeReference(OTHER, "SET")));
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(CLOB, "TEXT")));
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(CLOB, "TINYTEXT")));
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(CLOB, "MEDIUMTEXT")));
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(CLOB, "LONGTEXT")));
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(BLOB)));
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(BLOB, "TINYBLOB")));
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(BLOB, "MEDIUMBLOB")));
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(BLOB, "LONGBLOB")));
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(DATE)));
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(TIME)));
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(TIMESTAMP)));
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(TIMESTAMP, "DATETIME")));
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(INTEGER, "YEAR")));
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(OTHER, "BINARY")));
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(OTHER, "VARBINARY")));
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(OTHER, "ENUM")));
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(OTHER, "SET")));
 		// FORMAT-ON
 	}
 	

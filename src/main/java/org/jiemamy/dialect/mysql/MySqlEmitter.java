@@ -33,14 +33,14 @@ import org.jiemamy.dialect.TokenResolver;
 import org.jiemamy.dialect.mysql.internal.MySqlIdentifier;
 import org.jiemamy.dialect.mysql.parameter.MySqlParameterKeys;
 import org.jiemamy.dialect.mysql.parameter.StorageEngineType;
-import org.jiemamy.model.DatabaseObjectModel;
-import org.jiemamy.model.sql.DefaultSqlStatement;
+import org.jiemamy.model.DbObject;
 import org.jiemamy.model.sql.Identifier;
 import org.jiemamy.model.sql.Keyword;
 import org.jiemamy.model.sql.Separator;
+import org.jiemamy.model.sql.SimpleSqlStatement;
 import org.jiemamy.model.sql.SqlStatement;
 import org.jiemamy.model.sql.Token;
-import org.jiemamy.model.table.TableModel;
+import org.jiemamy.model.table.JmTable;
 
 /**
  * MySQL用の{@link SqlEmitter}実装クラス。
@@ -71,15 +71,15 @@ public class MySqlEmitter extends DefaultSqlEmitter {
 	}
 	
 	@Override
-	protected SqlStatement emitCreateStatement(JiemamyContext context, DatabaseObjectModel dom) {
-		DefaultSqlStatement statement = (DefaultSqlStatement) super.emitCreateStatement(context, dom);
+	protected SqlStatement emitCreateDbObjectStatement(JiemamyContext context, DbObject dbObject) {
+		SimpleSqlStatement statement = (SimpleSqlStatement) super.emitCreateDbObjectStatement(context, dbObject);
 		
 		List<Token> tokens = statement.toTokens();
 		tokens = convertIdentifierToMySqlIdentifier(tokens);
 		
-		if (dom instanceof TableModel) {
-			TableModel tableModel = (TableModel) dom;
-			StorageEngineType engineType = tableModel.getParam(MySqlParameterKeys.STORAGE_ENGINE);
+		if (dbObject instanceof JmTable) {
+			JmTable table = (JmTable) dbObject;
+			StorageEngineType engineType = table.getParam(MySqlParameterKeys.STORAGE_ENGINE);
 			if (engineType != null && StringUtils.isEmpty(engineType.toString()) == false) {
 				String engineName = engineType.toString();
 				// FORMAT-OFF
@@ -92,16 +92,16 @@ public class MySqlEmitter extends DefaultSqlEmitter {
 			}
 		}
 		
-		return new DefaultSqlStatement(tokens);
+		return new SimpleSqlStatement(tokens);
 	}
 	
 	@Override
-	protected SqlStatement emitDropEntityStatement(DatabaseObjectModel dom) {
-		DefaultSqlStatement stmt = (DefaultSqlStatement) super.emitDropEntityStatement(dom);
+	protected SqlStatement emitDropDbObjectStatement(DbObject dbObject) {
+		SimpleSqlStatement stmt = (SimpleSqlStatement) super.emitDropDbObjectStatement(dbObject);
 		List<Token> tokens = stmt.toTokens();
 		tokens = convertIdentifierToMySqlIdentifier(tokens);
 		tokens.addAll(2, Arrays.asList((Token) Keyword.of("IF"), Keyword.of("EXISTS")));
-		return new DefaultSqlStatement(tokens);
+		return new SimpleSqlStatement(tokens);
 	}
 	
 	private List<Token> convertIdentifierToMySqlIdentifier(List<Token> tokens) {

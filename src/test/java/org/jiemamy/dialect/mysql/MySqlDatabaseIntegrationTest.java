@@ -33,14 +33,14 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.jiemamy.DatabaseCleaner;
 import org.jiemamy.JiemamyContext;
-import org.jiemamy.composer.exporter.DefaultSqlExportConfig;
+import org.jiemamy.composer.exporter.SimpleSqlExportConfig;
 import org.jiemamy.composer.exporter.SqlExporter;
-import org.jiemamy.composer.importer.DatabaseImporter;
-import org.jiemamy.model.DatabaseObjectModel;
+import org.jiemamy.composer.importer.DbImporter;
+import org.jiemamy.model.DbObject;
 import org.jiemamy.test.MySqlDatabaseTest;
 import org.jiemamy.test.TestModelBuilders;
+import org.jiemamy.utils.DbCleaner;
 import org.jiemamy.utils.sql.SqlExecutor;
 
 /**
@@ -61,14 +61,14 @@ public class MySqlDatabaseIntegrationTest extends MySqlDatabaseTest {
 	 */
 	@Test
 	public void test01_import() throws Exception {
-		DatabaseImporter importer = new DatabaseImporter();
+		DbImporter importer = new DbImporter();
 		JiemamyContext context = new JiemamyContext();
 		boolean importModel = importer.importModel(context, newImportConfig());
 		assertThat(importModel, is(true));
 		
-		Set<DatabaseObjectModel> databaseObjects = context.getDatabaseObjects();
-		for (DatabaseObjectModel databaseObjectModel : databaseObjects) {
-			logger.info(databaseObjectModel.toString());
+		Set<DbObject> dbObjects = context.getDbObjects();
+		for (DbObject dbObject : dbObjects) {
+			logger.info(dbObject.toString());
 		}
 	}
 	
@@ -80,12 +80,12 @@ public class MySqlDatabaseIntegrationTest extends MySqlDatabaseTest {
 	@Test
 	public void test02_clean() throws Exception {
 		// まず clean
-		new DatabaseCleaner().clean(newImportConfig());
+		DbCleaner.clean(newImportConfig());
 		
 		// export
 		File outFile = new File("target/testresult/PostgresqlDatabaseTest_test02.sql");
 		
-		DefaultSqlExportConfig config = new DefaultSqlExportConfig();
+		SimpleSqlExportConfig config = new SimpleSqlExportConfig();
 		config.setDataSetIndex(0);
 		config.setEmitDropStatements(false);
 		config.setOutputFile(outFile);
@@ -108,15 +108,15 @@ public class MySqlDatabaseIntegrationTest extends MySqlDatabaseTest {
 		
 		// assert not zero
 		JiemamyContext context = new JiemamyContext();
-		assertThat(new DatabaseImporter().importModel(context, newImportConfig()), is(true));
-		assertThat(context.getDatabaseObjects().size(), is(not(0)));
+		assertThat(new DbImporter().importModel(context, newImportConfig()), is(true));
+		assertThat(context.getDbObjects().size(), is(not(0)));
 		
 		// clean
-		new DatabaseCleaner().clean(newImportConfig());
+		DbCleaner.clean(newImportConfig());
 		
 		// assert zero
 		JiemamyContext context2 = new JiemamyContext();
-		assertThat(new DatabaseImporter().importModel(context2, newImportConfig()), is(true));
-		assertThat(context2.getDatabaseObjects().size(), is(0));
+		assertThat(new DbImporter().importModel(context2, newImportConfig()), is(true));
+		assertThat(context2.getDbObjects().size(), is(0));
 	}
 }
