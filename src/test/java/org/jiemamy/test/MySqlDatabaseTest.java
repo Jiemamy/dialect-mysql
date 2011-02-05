@@ -22,6 +22,8 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.junit.internal.AssumptionViolatedException;
+
 import org.jiemamy.composer.importer.SimpleDbImportConfig;
 import org.jiemamy.dialect.mysql.MySqlDialect;
 
@@ -41,6 +43,12 @@ public abstract class MySqlDatabaseTest extends AbstractDatabaseTest {
 		return "/mysql_local.properties";
 	}
 	
+	/**
+	 * {@link SimpleDbImportConfig}の新しいインスタンスを生成し、必要事項を設定して返す。
+	 * 
+	 * @return {@link SimpleDbImportConfig}の新しいインスタンス
+	 * @throws AssumptionViolatedException プロパティファイルがロードできなかった場合
+	 */
 	protected SimpleDbImportConfig newImportConfig() {
 		SimpleDbImportConfig config = new SimpleDbImportConfig();
 		config.setDialect(new MySqlDialect());
