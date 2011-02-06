@@ -13,18 +13,11 @@
   </root>
 
   <logger name="org.jiemamy">
-    <level value="INFO" />
-  </logger>
-
-  <logger name="org.jiemamy.utils.enhancer">
-    <level value="WARN" />
-  </logger>
-
-  <logger name="org.jiemamy.dialect">
     <level value="DEBUG" />
   </logger>
 
-  <logger name="org.jiemamy.dialect.sql99">
+  <logger name="org.jiemamy.dialect">
     <level value="TRACE" />
   </logger>
+
 </configuration>
