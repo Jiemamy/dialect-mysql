@@ -18,8 +18,8 @@
     <url>http://jira.jiemamy.org/browse/DMYS</url>
   </issueManagement>
   <ciManagement>
-    <system>hudson</system>
-    <url>http://hudson.jiemamy.org/job/jiemamy-dialect-mysql/</url>
+    <system>bamboo</system>
+    <url>http://bamboo.jiemamy.org/browse/HERMES-DMYS</url>
     <notifiers>
       <notifier>
         <sendOnSuccess>false</sendOnSuccess>
