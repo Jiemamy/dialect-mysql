@@ -28,7 +28,7 @@ import org.jiemamy.composer.importer.SimpleDbImportConfig;
 import org.jiemamy.dialect.mysql.MySqlDialect;
 
 /**
- * TODO for daisuke
+ * 実データベースのMySQLに接続して行うインテグレーションテスト用の抽象実装クラス。
  * 
  * @version $Id$
  * @author daisuke

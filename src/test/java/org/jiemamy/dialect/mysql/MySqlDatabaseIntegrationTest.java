@@ -44,7 +44,7 @@ import org.jiemamy.utils.DbCleaner;
 import org.jiemamy.utils.sql.SqlExecutor;
 
 /**
- * TODO for daisuke
+ * {@link MySqlDialect}と実DBの結合テスト。
  * 
  * @version $Id$
  * @author daisuke
@@ -55,7 +55,7 @@ public class MySqlDatabaseIntegrationTest extends MySqlDatabaseTest {
 	
 
 	/**
-	 * TODO for daisuke
+	 * 実DBからインポートしてみる。
 	 * 
 	 * @throws Exception 例外が発生した場合
 	 */
@@ -73,7 +73,7 @@ public class MySqlDatabaseIntegrationTest extends MySqlDatabaseTest {
 	}
 	
 	/**
-	 * TODO for daisuke
+	 * 実DBをcleanしてみる。
 	 * 
 	 * @throws Exception 例外が発生した場合
 	 */

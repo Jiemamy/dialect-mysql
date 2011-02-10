@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.jiemamy.dialect.DefaultTokenResolver;
+import org.jiemamy.dialect.TokenResolver;
 import org.jiemamy.dialect.mysql.internal.MySqlKeywords;
 import org.jiemamy.dialect.mysql.parameter.MySqlParameterKeys;
 import org.jiemamy.model.constraint.JmDeferrability.InitiallyCheckTime;
@@ -30,7 +31,7 @@ import org.jiemamy.model.datatype.TypeParameterKey;
 import org.jiemamy.model.sql.Token;
 
 /**
- * TODO for daisuke
+ * MySQL用の{@link TokenResolver}実装。
  * 
  * @version $Id$
  * @author daisuke
