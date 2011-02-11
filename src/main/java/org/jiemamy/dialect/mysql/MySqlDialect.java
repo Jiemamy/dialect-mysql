@@ -35,7 +35,7 @@ import static org.jiemamy.model.datatype.RawTypeCategory.TIME;
 import static org.jiemamy.model.datatype.RawTypeCategory.TIMESTAMP;
 import static org.jiemamy.model.datatype.RawTypeCategory.VARCHAR;
 
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -43,9 +43,8 @@ import com.google.common.collect.Lists;
 import org.jiemamy.dialect.AbstractDialect;
 import org.jiemamy.dialect.DatabaseMetadataParser;
 import org.jiemamy.dialect.DefaultDatabaseMetadataParser;
+import org.jiemamy.dialect.Necessity;
 import org.jiemamy.dialect.SqlEmitter;
-import org.jiemamy.dialect.TypeParameterSpec;
-import org.jiemamy.dialect.TypeParameterSpec.Necessity;
 import org.jiemamy.dialect.mysql.parameter.MySqlParameterKeys;
 import org.jiemamy.model.datatype.SimpleRawTypeDescriptor;
 import org.jiemamy.model.datatype.TypeParameterKey;
@@ -57,71 +56,86 @@ import org.jiemamy.validator.Validator;
  * 
  * @author daisuke
  */
+@SuppressWarnings("serial")
 public class MySqlDialect extends AbstractDialect {
 	
 	private static List<Entry> typeEntries = Lists.newArrayList();
 	
 	static {
 		// FORMAT-OFF
-		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(INTEGER), Arrays.asList(
-				new TypeParameterSpec(TypeParameterKey.SIZE, Necessity.OPTIONAL),
-				new TypeParameterSpec(TypeParameterKey.SERIAL, Necessity.OPTIONAL),
-				new TypeParameterSpec(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL)
-		)));
-		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(INTEGER, "MEDIUMINT"), Arrays.asList(
-				new TypeParameterSpec(TypeParameterKey.SIZE, Necessity.OPTIONAL),
-				new TypeParameterSpec(TypeParameterKey.SERIAL, Necessity.OPTIONAL),
-				new TypeParameterSpec(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL)
-		)));
-		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(INTEGER, "BIGINT"), Arrays.asList(
-				new TypeParameterSpec(TypeParameterKey.SIZE, Necessity.OPTIONAL),
-				new TypeParameterSpec(TypeParameterKey.SERIAL, Necessity.OPTIONAL),
-				new TypeParameterSpec(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL)
-		)));
-		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(SMALLINT), Arrays.asList(
-				new TypeParameterSpec(TypeParameterKey.SIZE, Necessity.OPTIONAL),
-				new TypeParameterSpec(TypeParameterKey.SERIAL, Necessity.OPTIONAL),
-				new TypeParameterSpec(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL)
-		)));
-		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(SMALLINT, "TINYINT"), Arrays.asList(
-				new TypeParameterSpec(TypeParameterKey.SIZE, Necessity.OPTIONAL),
-				new TypeParameterSpec(TypeParameterKey.SERIAL, Necessity.OPTIONAL),
-				new TypeParameterSpec(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL)
-		)));
-		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(NUMERIC), Arrays.asList(
-				new TypeParameterSpec(TypeParameterKey.PRECISION, Necessity.REQUIRED),
-				new TypeParameterSpec(TypeParameterKey.SCALE, Necessity.REQUIRED),
-				new TypeParameterSpec(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL)
-		)));
-		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(DECIMAL), Arrays.asList(
-				new TypeParameterSpec(TypeParameterKey.PRECISION, Necessity.REQUIRED),
-				new TypeParameterSpec(TypeParameterKey.SCALE, Necessity.REQUIRED),
-				new TypeParameterSpec(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL)
-		)));
-		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(FLOAT), Arrays.asList(
-				new TypeParameterSpec(TypeParameterKey.PRECISION, Necessity.REQUIRED),
-				new TypeParameterSpec(TypeParameterKey.SCALE, Necessity.REQUIRED),
-				new TypeParameterSpec(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL)
-		)));
-		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(REAL), Arrays.asList(
-				new TypeParameterSpec(TypeParameterKey.PRECISION, Necessity.REQUIRED),
-				new TypeParameterSpec(TypeParameterKey.SCALE, Necessity.REQUIRED),
-				new TypeParameterSpec(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL)
-		)));
-		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(DOUBLE), Arrays.asList(
-				new TypeParameterSpec(TypeParameterKey.PRECISION, Necessity.REQUIRED),
-				new TypeParameterSpec(TypeParameterKey.SCALE, Necessity.REQUIRED),
-				new TypeParameterSpec(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL)
-		)));
-		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(BIT), Arrays.asList(
-				new TypeParameterSpec(TypeParameterKey.SIZE, Necessity.REQUIRED)
-		)));
-		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(CHARACTER), Arrays.asList(
-				new TypeParameterSpec(TypeParameterKey.SIZE, Necessity.REQUIRED)
-		)));
-		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(VARCHAR), Arrays.asList(
-				new TypeParameterSpec(TypeParameterKey.SIZE, Necessity.REQUIRED)
-		)));
+		// CHECKSTYLE:OFF
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(INTEGER),
+				new HashMap<TypeParameterKey<?>, Necessity>() {{
+						put(TypeParameterKey.SIZE, Necessity.OPTIONAL);
+						put(TypeParameterKey.SERIAL, Necessity.OPTIONAL);
+						put(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL);
+				}}));
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(INTEGER, "MEDIUMINT"),
+				new HashMap<TypeParameterKey<?>, Necessity>() {{
+						put(TypeParameterKey.SIZE, Necessity.OPTIONAL);
+						put(TypeParameterKey.SERIAL, Necessity.OPTIONAL);
+						put(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL);
+				}}));
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(INTEGER, "BIGINT"),
+				new HashMap<TypeParameterKey<?>, Necessity>() {{
+						put(TypeParameterKey.SIZE, Necessity.OPTIONAL);
+						put(TypeParameterKey.SERIAL, Necessity.OPTIONAL);
+						put(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL);
+				}}));
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(SMALLINT),
+				new HashMap<TypeParameterKey<?>, Necessity>() {{
+						put(TypeParameterKey.SIZE, Necessity.OPTIONAL);
+						put(TypeParameterKey.SERIAL, Necessity.OPTIONAL);
+						put(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL);
+				}}));
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(SMALLINT, "TINYINT"),
+				new HashMap<TypeParameterKey<?>, Necessity>() {{
+						put(TypeParameterKey.SIZE, Necessity.OPTIONAL);
+						put(TypeParameterKey.SERIAL, Necessity.OPTIONAL);
+						put(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL);
+				}}));
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(NUMERIC),
+				new HashMap<TypeParameterKey<?>, Necessity>() {{
+						put(TypeParameterKey.PRECISION, Necessity.REQUIRED);
+						put(TypeParameterKey.SCALE, Necessity.REQUIRED);
+						put(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL);
+				}}));
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(DECIMAL),
+				new HashMap<TypeParameterKey<?>, Necessity>() {{
+						put(TypeParameterKey.PRECISION, Necessity.REQUIRED);
+						put(TypeParameterKey.SCALE, Necessity.REQUIRED);
+						put(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL);
+				}}));
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(FLOAT),
+				new HashMap<TypeParameterKey<?>, Necessity>() {{
+						put(TypeParameterKey.PRECISION, Necessity.REQUIRED);
+						put(TypeParameterKey.SCALE, Necessity.REQUIRED);
+						put(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL);
+				}}));
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(REAL),
+				new HashMap<TypeParameterKey<?>, Necessity>() {{
+						put(TypeParameterKey.PRECISION, Necessity.REQUIRED);
+						put(TypeParameterKey.SCALE, Necessity.REQUIRED);
+						put(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL);
+				}}));
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(DOUBLE),
+				new HashMap<TypeParameterKey<?>, Necessity>() {{
+						put(TypeParameterKey.PRECISION, Necessity.REQUIRED);
+						put(TypeParameterKey.SCALE, Necessity.REQUIRED);
+						put(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL);
+				}}));
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(BIT),
+				new HashMap<TypeParameterKey<?>, Necessity>() {{
+						put(TypeParameterKey.SIZE, Necessity.REQUIRED);
+				}}));
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(CHARACTER),
+				new HashMap<TypeParameterKey<?>, Necessity>() {{
+						put(TypeParameterKey.SIZE, Necessity.REQUIRED);
+				}}));
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(VARCHAR),
+				new HashMap<TypeParameterKey<?>, Necessity>() {{
+						put(TypeParameterKey.SIZE, Necessity.REQUIRED);
+				}}));
 		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(CLOB, "TEXT")));
 		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(CLOB, "TINYTEXT")));
 		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(CLOB, "MEDIUMTEXT")));
@@ -139,6 +153,7 @@ public class MySqlDialect extends AbstractDialect {
 		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(OTHER, "VARBINARY")));
 		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(OTHER, "ENUM")));
 		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(OTHER, "SET")));
+		// CHECKSTYLE:ON
 		// FORMAT-ON
 	}
 	
