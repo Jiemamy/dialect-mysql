@@ -38,6 +38,6 @@ public class MySqlDatabaseMetadataParser extends DefaultDatabaseMetadataParser {
 	 * @throws IllegalArgumentException 引数に{@code null}を与えた場合
 	 */
 	public MySqlDatabaseMetadataParser(MySqlDialect dialect) {
-		super(new MySqlDatabaseObjectImportVisitor(dialect), new DefaultForeignKeyImportVisitor(dialect));
+		super(new MySqlDbObjectImportVisitor(dialect), new DefaultForeignKeyImportVisitor(dialect));
 	}
 }

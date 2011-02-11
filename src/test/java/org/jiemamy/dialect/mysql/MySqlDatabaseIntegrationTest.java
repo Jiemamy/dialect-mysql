@@ -27,6 +27,8 @@ import java.io.FileReader;
 import java.sql.Connection;
 import java.util.Set;
 
+import com.google.common.collect.Iterables;
+
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
@@ -50,8 +52,11 @@ import org.jiemamy.model.datatype.RawTypeDescriptor;
 import org.jiemamy.model.datatype.SimpleDataType;
 import org.jiemamy.model.datatype.SimpleRawTypeDescriptor;
 import org.jiemamy.model.datatype.TypeParameterKey;
+import org.jiemamy.model.table.JmTable;
 import org.jiemamy.model.table.JmTableBuilder;
 import org.jiemamy.model.table.SimpleJmTable;
+import org.jiemamy.model.view.JmView;
+import org.jiemamy.model.view.SimpleJmView;
 import org.jiemamy.test.MySqlDatabaseTest;
 import org.jiemamy.test.TestModelBuilders;
 import org.jiemamy.utils.DbCleaner;
@@ -72,7 +77,16 @@ public class MySqlDatabaseIntegrationTest extends MySqlDatabaseTest {
 	
 	private static final RawTypeDescriptor VARCHAR = new SimpleRawTypeDescriptor(RawTypeCategory.VARCHAR);
 	
-
+	// FORMAT-OFF
+	private static final String VIEW_DEFINITION = "/* ALGORITHM=UNDEFINED */ "
+			+ "select "
+				+ "`jiemamy01`.`T_FOO`.`ID` AS `ID`,"
+				+ "`jiemamy01`.`T_FOO`.`NAME` AS `NAME`,"
+				+ "`jiemamy01`.`T_FOO`.`HOGE` AS `HOGE` "
+			+ "from `jiemamy01`.`T_FOO` "
+			+ "where (`jiemamy01`.`T_FOO`.`ID` > 10)";
+	// FORMAT-ON
+	
 	/**
 	 * 実DBからインポートしてみる。
 	 * 
@@ -146,7 +160,81 @@ public class MySqlDatabaseIntegrationTest extends MySqlDatabaseTest {
 	 * @throws Exception 例外が発生した場合
 	 */
 	@Test
-	public void test03_engine() throws Exception {
+	public void test03_view() throws Exception {
+		DbCleaner.clean(newImportConfig());
+		
+		SimpleDataType varchar32 = new SimpleDataType(VARCHAR);
+		varchar32.putParam(TypeParameterKey.SIZE, 32);
+		
+		SimpleDataType aiInteger = new SimpleDataType(INTEGER);
+		aiInteger.putParam(TypeParameterKey.SERIAL, true);
+		
+		JiemamyContext context = new JiemamyContext(SqlFacet.PROVIDER);
+		SimpleJmMetadata meta = new SimpleJmMetadata();
+		meta.setDialectClassName(MySqlDialect.class.getName());
+		context.setMetadata(meta);
+		
+		{
+			// FORMAT-OFF
+			SimpleJmTable table = new JmTableBuilder("T_FOO")
+					.with(new JmColumnBuilder("ID").type(aiInteger).build())
+					.with(new JmColumnBuilder("NAME").type(varchar32).build())
+					.with(new JmColumnBuilder("HOGE").type(new SimpleDataType(INTEGER)).build())
+					.build();
+			// FORMAT-ON
+			table.store(SimpleJmPrimaryKeyConstraint.of(table.getColumn("ID")));
+			context.store(table);
+			
+			SimpleJmView view = new SimpleJmView();
+			view.setName("V_BAR");
+			view.setDefinition(VIEW_DEFINITION);
+			context.store(view);
+		}
+		
+		File outFile = new File("target/testresult/MySqlDatabaseTest_test04.sql");
+		SimpleSqlExportConfig config = new SimpleSqlExportConfig();
+		config.setDataSetIndex(0);
+		config.setEmitDropStatements(false);
+		config.setOutputFile(outFile);
+		config.setOverwrite(true);
+		
+		new SqlExporter().exportModel(context, config);
+		
+		Connection connection = null;
+		FileReader fileReader = null;
+		try {
+			connection = getConnection();
+			SqlExecutor sqlExecutor = new SqlExecutor(connection);
+			fileReader = new FileReader(outFile);
+			sqlExecutor.execute(fileReader);
+		} finally {
+			IOUtils.closeQuietly(fileReader);
+			DbUtils.closeQuietly(connection);
+		}
+		
+		connection = null;
+		try {
+			DbImporter importer = new DbImporter();
+			JiemamyContext imported = new JiemamyContext();
+			boolean importModel = importer.importModel(imported, newImportConfig());
+			assertThat(importModel, is(true));
+			JmTable importedTable = imported.getTable("T_FOO");
+			assertThat(importedTable.getName(), is("T_FOO"));
+			JmView importedView = Iterables.getOnlyElement(imported.getViews());
+			assertThat(importedView.getName(), is("V_BAR"));
+			assertThat(importedView.getDefinition(), is(VIEW_DEFINITION));
+		} finally {
+			DbUtils.closeQuietly(connection);
+		}
+	}
+	
+	/**
+	 * TODO for daisuke
+	 * 
+	 * @throws Exception 例外が発生した場合
+	 */
+	@Test
+	public void test04_engine() throws Exception {
 		DbCleaner.clean(newImportConfig());
 		
 		SimpleDataType varchar32 = new SimpleDataType(VARCHAR);

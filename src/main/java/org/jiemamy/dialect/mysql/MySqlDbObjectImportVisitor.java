@@ -25,12 +25,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.jiemamy.dialect.DefaultDatabaseObjectImportVisitor;
+import org.apache.commons.lang.Validate;
+
+import org.jiemamy.dialect.DefaultDbObjectImportVisitor;
 import org.jiemamy.dialect.Dialect;
 import org.jiemamy.dialect.mysql.parameter.MySqlParameterKeys;
 import org.jiemamy.dialect.mysql.parameter.StandardEngine;
 import org.jiemamy.model.DbObject;
 import org.jiemamy.model.SimpleDbObject;
+import org.jiemamy.model.view.SimpleJmView;
 import org.jiemamy.utils.sql.metadata.TableMeta;
 import org.jiemamy.utils.sql.metadata.TypeSafeDatabaseMetaData;
 
@@ -40,7 +43,7 @@ import org.jiemamy.utils.sql.metadata.TypeSafeDatabaseMetaData;
  * @version $Id$
  * @author daisuke
  */
-public class MySqlDatabaseObjectImportVisitor extends DefaultDatabaseObjectImportVisitor {
+public class MySqlDbObjectImportVisitor extends DefaultDbObjectImportVisitor {
 	
 	/**
 	 * インスタンスを生成する。
@@ -48,7 +51,7 @@ public class MySqlDatabaseObjectImportVisitor extends DefaultDatabaseObjectImpor
 	 * @param dialect {@link Dialect}
 	 * @throws IllegalArgumentException 引数に{@code null}を与えた場合
 	 */
-	public MySqlDatabaseObjectImportVisitor(MySqlDialect dialect) {
+	public MySqlDbObjectImportVisitor(MySqlDialect dialect) {
 		super(dialect);
 	}
 	
@@ -57,11 +60,7 @@ public class MySqlDatabaseObjectImportVisitor extends DefaultDatabaseObjectImpor
 		SimpleDbObject dbObject = (SimpleDbObject) super.createDbObject(tableMeta);
 		
 		try {
-			// TODO すまぬ、無茶しているｗ  TypeSafeDatabaseMetaData#getConnection():Connection があればよかった…。
-			Field field = TypeSafeDatabaseMetaData.class.getDeclaredField("meta");
-			field.setAccessible(true);
-			DatabaseMetaData meta = (DatabaseMetaData) field.get(getMeta());
-			Connection connection = meta.getConnection();
+			Connection connection = getConnection();
 			String engineTypeString = getEngineType(connection, dbObject.getName());
 			if (engineTypeString != null) {
 				StandardEngine engineType = StandardEngine.valueOf(engineTypeString);
@@ -73,6 +72,26 @@ public class MySqlDatabaseObjectImportVisitor extends DefaultDatabaseObjectImpor
 			e.printStackTrace();
 		}
 		return dbObject;
+	}
+	
+	@Override
+	protected SimpleJmView createView(String viewName) throws SQLException {
+		Validate.notNull(viewName);
+		
+		SimpleJmView view = new SimpleJmView();
+		view.setName(viewName);
+		
+		try {
+			Connection connection = getConnection();
+			String definition = getViewDefinition(connection, viewName);
+			view.setDefinition(definition);
+		} catch (SQLException e) {
+			throw e;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return view;
 	}
 	
 	// http://jira.jiemamy.org/browse/DMYS-2
@@ -92,5 +111,31 @@ public class MySqlDatabaseObjectImportVisitor extends DefaultDatabaseObjectImpor
 				ps.close();
 			}
 		}
+	}
+	
+	String getViewDefinition(Connection conn, String viewName) throws SQLException {
+		PreparedStatement ps = null;
+		try {
+			ps = conn.prepareStatement("select * from information_schema.VIEWS where table_name = ?;");
+			ps.setString(1, viewName);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				return rs.getString("VIEW_DEFINITION");
+			}
+			return null;
+		} finally {
+			if (ps != null) {
+				ps.close();
+			}
+		}
+	}
+	
+	// TODO すまぬ、無茶しているｗ  TypeSafeDatabaseMetaData#getConnection():Connection があればよかった…。
+	private Connection getConnection() throws NoSuchFieldException, IllegalAccessException, SQLException {
+		Field field = TypeSafeDatabaseMetaData.class.getDeclaredField("meta");
+		field.setAccessible(true);
+		DatabaseMetaData meta = (DatabaseMetaData) field.get(getMeta());
+		Connection connection = meta.getConnection();
+		return connection;
 	}
 }
