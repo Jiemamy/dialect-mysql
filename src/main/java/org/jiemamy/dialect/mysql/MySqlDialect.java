@@ -42,7 +42,6 @@ import com.google.common.collect.Lists;
 
 import org.jiemamy.dialect.AbstractDialect;
 import org.jiemamy.dialect.DatabaseMetadataParser;
-import org.jiemamy.dialect.DefaultDatabaseMetadataParser;
 import org.jiemamy.dialect.Necessity;
 import org.jiemamy.dialect.SqlEmitter;
 import org.jiemamy.dialect.mysql.parameter.MySqlParameterKeys;
@@ -166,8 +165,7 @@ public class MySqlDialect extends AbstractDialect {
 	}
 	
 	public DatabaseMetadataParser getDatabaseMetadataParser() {
-		// TODO カスタマイズ for [DMYS-2]
-		return new DefaultDatabaseMetadataParser(this);
+		return new MySqlDatabaseMetadataParser(this);
 	}
 	
 	public String getName() {

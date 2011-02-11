@@ -34,10 +34,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.jiemamy.JiemamyContext;
+import org.jiemamy.SimpleJmMetadata;
+import org.jiemamy.SqlFacet;
 import org.jiemamy.composer.exporter.SimpleSqlExportConfig;
 import org.jiemamy.composer.exporter.SqlExporter;
 import org.jiemamy.composer.importer.DbImporter;
+import org.jiemamy.dialect.mysql.parameter.MySqlParameterKeys;
+import org.jiemamy.dialect.mysql.parameter.StandardEngine;
+import org.jiemamy.dialect.mysql.parameter.StorageEngineType;
 import org.jiemamy.model.DbObject;
+import org.jiemamy.model.column.JmColumnBuilder;
+import org.jiemamy.model.constraint.SimpleJmPrimaryKeyConstraint;
+import org.jiemamy.model.datatype.RawTypeCategory;
+import org.jiemamy.model.datatype.RawTypeDescriptor;
+import org.jiemamy.model.datatype.SimpleDataType;
+import org.jiemamy.model.datatype.SimpleRawTypeDescriptor;
+import org.jiemamy.model.datatype.TypeParameterKey;
+import org.jiemamy.model.table.JmTableBuilder;
+import org.jiemamy.model.table.SimpleJmTable;
 import org.jiemamy.test.MySqlDatabaseTest;
 import org.jiemamy.test.TestModelBuilders;
 import org.jiemamy.utils.DbCleaner;
@@ -52,6 +66,11 @@ import org.jiemamy.utils.sql.SqlExecutor;
 public class MySqlDatabaseIntegrationTest extends MySqlDatabaseTest {
 	
 	private static Logger logger = LoggerFactory.getLogger(MySqlDatabaseIntegrationTest.class);
+	
+	private static final RawTypeDescriptor INTEGER = new SimpleRawTypeDescriptor(RawTypeCategory.INTEGER, "INTEGER",
+			"int4");
+	
+	private static final RawTypeDescriptor VARCHAR = new SimpleRawTypeDescriptor(RawTypeCategory.VARCHAR);
 	
 
 	/**
@@ -83,7 +102,7 @@ public class MySqlDatabaseIntegrationTest extends MySqlDatabaseTest {
 		DbCleaner.clean(newImportConfig());
 		
 		// export
-		File outFile = new File("target/testresult/PostgresqlDatabaseTest_test02.sql");
+		File outFile = new File("target/testresult/MySqlDatabaseTest_test02.sql");
 		
 		SimpleSqlExportConfig config = new SimpleSqlExportConfig();
 		config.setDataSetIndex(0);
@@ -110,6 +129,7 @@ public class MySqlDatabaseIntegrationTest extends MySqlDatabaseTest {
 		JiemamyContext context = new JiemamyContext();
 		assertThat(new DbImporter().importModel(context, newImportConfig()), is(true));
 		assertThat(context.getDbObjects().size(), is(not(0)));
+		logger.info("{} tables exists", context.getTables().size());
 		
 		// clean
 		DbCleaner.clean(newImportConfig());
@@ -118,5 +138,84 @@ public class MySqlDatabaseIntegrationTest extends MySqlDatabaseTest {
 		JiemamyContext context2 = new JiemamyContext();
 		assertThat(new DbImporter().importModel(context2, newImportConfig()), is(true));
 		assertThat(context2.getDbObjects().size(), is(0));
+	}
+	
+	/**
+	 * TODO for daisuke
+	 * 
+	 * @throws Exception 例外が発生した場合
+	 */
+	@Test
+	public void test03_engine() throws Exception {
+		DbCleaner.clean(newImportConfig());
+		
+		SimpleDataType varchar32 = new SimpleDataType(VARCHAR);
+		varchar32.putParam(TypeParameterKey.SIZE, 32);
+		
+		SimpleDataType aiInteger = new SimpleDataType(INTEGER);
+		aiInteger.putParam(TypeParameterKey.SERIAL, true);
+		
+		JiemamyContext context = new JiemamyContext(SqlFacet.PROVIDER);
+		SimpleJmMetadata meta = new SimpleJmMetadata();
+		meta.setDialectClassName(MySqlDialect.class.getName());
+		context.setMetadata(meta);
+		
+		// FORMAT-OFF
+		SimpleJmTable foo = new JmTableBuilder("T_FOO")
+				.with(new JmColumnBuilder("ID").type(aiInteger).build())
+				.with(new JmColumnBuilder("NAME").type(varchar32).build())
+				.with(new JmColumnBuilder("HOGE").type(new SimpleDataType(INTEGER)).build())
+				.build();
+		// FORMAT-ON
+		foo.putParam(MySqlParameterKeys.STORAGE_ENGINE, StandardEngine.InnoDB);
+		foo.store(SimpleJmPrimaryKeyConstraint.of(foo.getColumn("ID")));
+		context.store(foo);
+		
+		// FORMAT-OFF
+		SimpleJmTable bar = new JmTableBuilder("T_BAR")
+				.with(new JmColumnBuilder("ID").type(aiInteger).build())
+				.with(new JmColumnBuilder("NAME").type(varchar32).build())
+				.with(new JmColumnBuilder("FUGA").type(new SimpleDataType(INTEGER)).build())
+				.build();
+		// FORMAT-ON
+		bar.store(SimpleJmPrimaryKeyConstraint.of(bar.getColumn("ID")));
+		bar.putParam(MySqlParameterKeys.STORAGE_ENGINE, StandardEngine.MyISAM);
+		context.store(bar);
+		
+		File outFile = new File("target/testresult/MySqlDatabaseTest_test03.sql");
+		SimpleSqlExportConfig config = new SimpleSqlExportConfig();
+		config.setDataSetIndex(0);
+		config.setEmitDropStatements(false);
+		config.setOutputFile(outFile);
+		config.setOverwrite(true);
+		
+		new SqlExporter().exportModel(context, config);
+		
+		Connection connection = null;
+		FileReader fileReader = null;
+		try {
+			connection = getConnection();
+			SqlExecutor sqlExecutor = new SqlExecutor(connection);
+			fileReader = new FileReader(outFile);
+			sqlExecutor.execute(fileReader);
+		} finally {
+			IOUtils.closeQuietly(fileReader);
+			DbUtils.closeQuietly(connection);
+		}
+		
+		connection = null;
+		try {
+			DbImporter importer = new DbImporter();
+			JiemamyContext imported = new JiemamyContext();
+			boolean importModel = importer.importModel(imported, newImportConfig());
+			assertThat(importModel, is(true));
+			assertThat(imported.getTables().size(), is(2));
+			StorageEngineType fooEngine = imported.getTable("T_FOO").getParam(MySqlParameterKeys.STORAGE_ENGINE);
+			assertThat(fooEngine, is((StorageEngineType) StandardEngine.InnoDB));
+			StorageEngineType barEngine = imported.getTable("T_BAR").getParam(MySqlParameterKeys.STORAGE_ENGINE);
+			assertThat(barEngine, is((StorageEngineType) StandardEngine.MyISAM));
+		} finally {
+			DbUtils.closeQuietly(connection);
+		}
 	}
 }
