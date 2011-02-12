@@ -155,7 +155,7 @@ public class MySqlDatabaseIntegrationTest extends MySqlDatabaseTest {
 	}
 	
 	/**
-	 * TODO for daisuke
+	 * VIEWをインポートしてみる。
 	 * 
 	 * @throws Exception 例外が発生した場合
 	 */
@@ -229,7 +229,7 @@ public class MySqlDatabaseIntegrationTest extends MySqlDatabaseTest {
 	}
 	
 	/**
-	 * TODO for daisuke
+	 * DBエンジン名をインポートしてみる。
 	 * 
 	 * @throws Exception 例外が発生した場合
 	 */

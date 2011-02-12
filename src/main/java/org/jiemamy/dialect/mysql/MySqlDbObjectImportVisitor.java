@@ -30,6 +30,7 @@ import org.jiemamy.dialect.DefaultDbObjectImportVisitor;
 import org.jiemamy.dialect.Dialect;
 import org.jiemamy.dialect.mysql.parameter.MySqlParameterKeys;
 import org.jiemamy.dialect.mysql.parameter.StandardEngine;
+import org.jiemamy.dialect.mysql.parameter.StorageEngineType;
 import org.jiemamy.model.DbObject;
 import org.jiemamy.model.SimpleDbObject;
 import org.jiemamy.model.view.SimpleJmView;
@@ -59,9 +60,21 @@ public class MySqlDbObjectImportVisitor extends DefaultDbObjectImportVisitor {
 		
 		try {
 			Connection connection = getMeta().getMetaData().getConnection();
-			String engineTypeString = getEngineType(connection, dbObject.getName());
+			final String engineTypeString = getEngineType(connection, dbObject.getName());
 			if (engineTypeString != null) {
-				StandardEngine engineType = StandardEngine.valueOf(engineTypeString);
+				StorageEngineType engineType;
+				try {
+					engineType = StandardEngine.valueOf(engineTypeString);
+				} catch (IllegalArgumentException e) {
+					// 一応、無理矢理未知のエンジンタイプに対応しておく
+					engineType = new StorageEngineType() {
+						
+						@Override
+						public String toString() {
+							return engineTypeString;
+						}
+					};
+				}
 				dbObject.putParam(MySqlParameterKeys.STORAGE_ENGINE, engineType);
 			}
 		} catch (SQLException e) {
