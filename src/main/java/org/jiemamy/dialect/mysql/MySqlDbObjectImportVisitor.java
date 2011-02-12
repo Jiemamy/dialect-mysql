@@ -18,15 +18,14 @@
  */
 package org.jiemamy.dialect.mysql;
 
-import java.lang.reflect.Field;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.apache.commons.lang.Validate;
 
+import org.jiemamy.dialect.DbObjectImportVisitor;
 import org.jiemamy.dialect.DefaultDbObjectImportVisitor;
 import org.jiemamy.dialect.Dialect;
 import org.jiemamy.dialect.mysql.parameter.MySqlParameterKeys;
@@ -35,10 +34,9 @@ import org.jiemamy.model.DbObject;
 import org.jiemamy.model.SimpleDbObject;
 import org.jiemamy.model.view.SimpleJmView;
 import org.jiemamy.utils.sql.metadata.TableMeta;
-import org.jiemamy.utils.sql.metadata.TypeSafeDatabaseMetaData;
 
 /**
- * TODO for daisuke
+ * MySQL用{@link DbObjectImportVisitor}実装クラス。
  * 
  * @version $Id$
  * @author daisuke
@@ -60,7 +58,7 @@ public class MySqlDbObjectImportVisitor extends DefaultDbObjectImportVisitor {
 		SimpleDbObject dbObject = (SimpleDbObject) super.createDbObject(tableMeta);
 		
 		try {
-			Connection connection = getConnection();
+			Connection connection = getMeta().getMetaData().getConnection();
 			String engineTypeString = getEngineType(connection, dbObject.getName());
 			if (engineTypeString != null) {
 				StandardEngine engineType = StandardEngine.valueOf(engineTypeString);
@@ -82,7 +80,7 @@ public class MySqlDbObjectImportVisitor extends DefaultDbObjectImportVisitor {
 		view.setName(viewName);
 		
 		try {
-			Connection connection = getConnection();
+			Connection connection = getMeta().getMetaData().getConnection();
 			String definition = getViewDefinition(connection, viewName);
 			view.setDefinition(definition);
 		} catch (SQLException e) {
@@ -128,14 +126,5 @@ public class MySqlDbObjectImportVisitor extends DefaultDbObjectImportVisitor {
 				ps.close();
 			}
 		}
-	}
-	
-	// TODO すまぬ、無茶しているｗ  TypeSafeDatabaseMetaData#getConnection():Connection があればよかった…。
-	private Connection getConnection() throws NoSuchFieldException, IllegalAccessException, SQLException {
-		Field field = TypeSafeDatabaseMetaData.class.getDeclaredField("meta");
-		field.setAccessible(true);
-		DatabaseMetaData meta = (DatabaseMetaData) field.get(getMeta());
-		Connection connection = meta.getConnection();
-		return connection;
 	}
 }
