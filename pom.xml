@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.jiemamy</groupId>
@@ -11,7 +9,7 @@
   <groupId>org.jiemamy</groupId>
   <artifactId>jiemamy-dialect-mysql</artifactId>
   <name>Jiemamy Dialect for MySQL</name>
-  <version>0.3.0-SNAPSHOT</version>
+  <version>0.3.0</version>
   <description><![CDATA[MySQLに対するSQL方言コンポーネント。]]></description>
   <issueManagement>
     <system>JIRA</system>
@@ -40,9 +38,9 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:svn:http://svn.jiemamy.org/products/hermes/mysql/trunk/jiemamy-dialect-mysql</connection>
-    <developerConnection>scm:svn:http://svn.jiemamy.org/products/hermes/mysql/trunk/jiemamy-dialect-mysql</developerConnection>
-    <url>http://fisheye.jiemamy.org/browse/hermes/mysql/trunk/jiemamy-dialect-mysql</url>
+    <connection>scm:svn:http://svn.jiemamy.org/products/hermes/mysql/tags/jiemamy-dialect-mysql-0.3.0</connection>
+    <developerConnection>scm:svn:http://svn.jiemamy.org/products/hermes/mysql/tags/jiemamy-dialect-mysql-0.3.0</developerConnection>
+    <url>http://fisheye.jiemamy.org/browse/hermes/mysql/tags/jiemamy-dialect-mysql-0.3.0</url>
   </scm>
   <build>
     <plugins>
@@ -54,8 +52,7 @@
             <phase>package</phase>
             <configuration>
               <target>
-                <copy file="target/${artifactId}-${version}.jar"
-                    tofile="${basedir}/../org.jiemamy.eclipse.dialect.mysql/lib/${artifactId}.jar"/>
+                <copy file="target/${artifactId}-${version}.jar" tofile="${basedir}/../org.jiemamy.eclipse.dialect.mysql/lib/${artifactId}.jar" />
               </target>
             </configuration>
             <goals>
