@@ -24,6 +24,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.apache.commons.lang.Validate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.jiemamy.dialect.DbObjectImportVisitor;
 import org.jiemamy.dialect.DefaultDbObjectImportVisitor;
@@ -44,6 +46,9 @@ import org.jiemamy.utils.sql.metadata.TableMeta;
  */
 public class MySqlDbObjectImportVisitor extends DefaultDbObjectImportVisitor {
 	
+	private static Logger logger = LoggerFactory.getLogger(MySqlDbObjectImportVisitor.class);
+	
+
 	/**
 	 * インスタンスを生成する。
 	 * 
@@ -80,7 +85,7 @@ public class MySqlDbObjectImportVisitor extends DefaultDbObjectImportVisitor {
 		} catch (SQLException e) {
 			throw e;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("exception is thrown", e);
 		}
 		return dbObject;
 	}
@@ -99,7 +104,7 @@ public class MySqlDbObjectImportVisitor extends DefaultDbObjectImportVisitor {
 		} catch (SQLException e) {
 			throw e;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("exception is thrown", e);
 		}
 		
 		return view;
