@@ -9,7 +9,7 @@
   <groupId>org.jiemamy</groupId>
   <artifactId>jiemamy-dialect-mysql</artifactId>
   <name>Jiemamy Dialect for MySQL</name>
-  <version>0.3.0</version>
+  <version>0.3.1-SNAPSHOT</version>
   <description><![CDATA[MySQLに対するSQL方言コンポーネント。]]></description>
   <issueManagement>
     <system>JIRA</system>
@@ -38,9 +38,9 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:svn:http://svn.jiemamy.org/products/hermes/mysql/tags/jiemamy-dialect-mysql-0.3.0</connection>
-    <developerConnection>scm:svn:http://svn.jiemamy.org/products/hermes/mysql/tags/jiemamy-dialect-mysql-0.3.0</developerConnection>
-    <url>http://fisheye.jiemamy.org/browse/hermes/mysql/tags/jiemamy-dialect-mysql-0.3.0</url>
+    <connection>scm:svn:http://svn.jiemamy.org/products/hermes/mysql/trunk/jiemamy-dialect-mysql</connection>
+    <developerConnection>scm:svn:http://svn.jiemamy.org/products/hermes/mysql/trunk/jiemamy-dialect-mysql</developerConnection>
+    <url>http://fisheye.jiemamy.org/browse/hermes/mysql/trunk/jiemamy-dialect-mysql</url>
   </scm>
   <build>
     <plugins>
