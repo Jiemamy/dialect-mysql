@@ -91,24 +91,24 @@
     <dependency>
       <groupId>org.jiemamy</groupId>
       <artifactId>jiemamy-core</artifactId>
-      <version>${project.version}</version>
+      <version>${jiemamy.version}</version>
     </dependency>
     <dependency>
       <groupId>org.jiemamy</groupId>
       <artifactId>jiemamy-sql</artifactId>
-      <version>${project.version}</version>
+      <version>${jiemamy.version}</version>
     </dependency>
     <dependency>
       <groupId>org.jiemamy</groupId>
       <artifactId>jiemamy-core</artifactId>
-      <version>${project.version}</version>
+      <version>${jiemamy.version}</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.jiemamy.test</groupId>
       <artifactId>jiemamy-test-helper</artifactId>
-      <version>${project.version}</version>
+      <version>${jiemamy.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -118,6 +118,7 @@
       <name>Jiemamy Repository</name>
       <url>http://maven.jiemamy.org/release</url>
     </repository>
+    <!-- 
     <repository>
       <id>jiemamy.org-snapshot</id>
       <name>Jiemamy Snapshot Repository</name>
@@ -127,5 +128,9 @@
         <updatePolicy>always</updatePolicy>
       </snapshots>
     </repository>
+    -->
   </repositories>
+  <properties>
+    <jiemamy.version>0.3.0</jiemamy.version>
+  </properties>
 </project>
