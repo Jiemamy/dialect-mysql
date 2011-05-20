@@ -37,8 +37,8 @@ public abstract class MySqlDatabaseTest extends AbstractDatabaseTest {
 	
 	@Override
 	protected String getPropertiesFilePath(String hostName) {
-		if (hostName.equals("griffon.jiemamy.org")) {
-			return "/mysql_griffon.properties";
+		if (hostName.equals("phoenix.jiemamy.org")) {
+			return "/mysql_phoenix.properties";
 		}
 		return "/mysql_local.properties";
 	}
