@@ -38,9 +38,9 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:svn:http://svn.jiemamy.org/products/hermes/mysql/trunk/jiemamy-dialect-mysql</connection>
-    <developerConnection>scm:svn:http://svn.jiemamy.org/products/hermes/mysql/trunk/jiemamy-dialect-mysql</developerConnection>
-    <url>http://fisheye.jiemamy.org/browse/hermes/mysql/trunk/jiemamy-dialect-mysql</url>
+    <connection>scm:svn:http://svn.jiemamy.org/products/hermes/mysql/coreapi/trunk</connection>
+    <developerConnection>scm:svn:http://svn.jiemamy.org/products/hermes/mysql/coreapi/trunk</developerConnection>
+    <url>http://fisheye.jiemamy.org/browse/hermes/mysql/coreapi/trunk</url>
   </scm>
   <build>
     <plugins>
