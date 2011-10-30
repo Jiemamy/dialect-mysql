@@ -123,7 +123,7 @@ public class MySqlEmitterTest {
 		assertThat(statements.get(0).toString(), is("DROP TABLE IF EXISTS `T_FOO`;"));
 		assertThat(
 				statements.get(1).toString(),
-				is("CREATE TABLE `T_FOO`(`ID` INTEGER AUTO_INCREMENT, `NAME` VARCHAR(32), `HOGE` TIMESTAMP NULL DEFAULT TIMESTAMP '2011-10-27 10:53:59');"));
+				is("CREATE TABLE `T_FOO`(`ID` INTEGER AUTO_INCREMENT, `NAME` VARCHAR(32), `HOGE` TIMESTAMP NULL DEFAULT TIMESTAMP '2011-10-27 10:53:59', PRIMARY KEY(`ID`));"));
 	}
 	
 	/**
