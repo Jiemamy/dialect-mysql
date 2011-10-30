@@ -36,7 +36,7 @@ import org.jiemamy.dialect.mysql.parameter.StorageEngineType;
 import org.jiemamy.model.DbObject;
 import org.jiemamy.model.column.JmColumn;
 import org.jiemamy.model.constraint.JmNotNullConstraint;
-import org.jiemamy.model.datatype.RawTypeCategory;
+import org.jiemamy.model.datatype.LiteralType;
 import org.jiemamy.model.sql.Identifier;
 import org.jiemamy.model.sql.Keyword;
 import org.jiemamy.model.sql.Literal;
@@ -95,9 +95,8 @@ public class MySqlEmitter extends DefaultSqlEmitter {
 		}
 		
 		if (StringUtils.isEmpty(column.getDefaultValue()) == false) {
-			RawTypeCategory category = column.getDataType().getRawTypeDescriptor().getCategory();
 			tokens.add(Keyword.DEFAULT);
-			tokens.add(Literal.of(column.getDefaultValue(), category.getLiteralType()));
+			tokens.add(Literal.of(column.getDefaultValue(), LiteralType.FRAGMENT));
 		}
 		
 		return tokens;

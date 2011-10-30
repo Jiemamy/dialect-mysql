@@ -104,7 +104,7 @@ public class MySqlEmitterTest {
 		SimpleJmColumn id = new JmColumnBuilder("ID").type(aiInteger).build();
 		
 		SimpleJmColumn hoge = new JmColumnBuilder("HOGE").type(timestamp).build();
-		hoge.setDefaultValue("2011-10-27 10:53:59");
+		hoge.setDefaultValue("'2011-10-27 10:53:59'");
 		
 		SimpleJmPrimaryKeyConstraint pk = SimpleJmPrimaryKeyConstraint.of(id);
 		
@@ -123,7 +123,7 @@ public class MySqlEmitterTest {
 		assertThat(statements.get(0).toString(), is("DROP TABLE IF EXISTS `T_FOO`;"));
 		assertThat(
 				statements.get(1).toString(),
-				is("CREATE TABLE `T_FOO`(`ID` INTEGER AUTO_INCREMENT, `NAME` VARCHAR(32), `HOGE` TIMESTAMP NULL DEFAULT TIMESTAMP '2011-10-27 10:53:59', PRIMARY KEY(`ID`));"));
+				is("CREATE TABLE `T_FOO`(`ID` INTEGER AUTO_INCREMENT, `NAME` VARCHAR(32), `HOGE` TIMESTAMP NULL DEFAULT '2011-10-27 10:53:59', PRIMARY KEY(`ID`));"));
 	}
 	
 	/**
