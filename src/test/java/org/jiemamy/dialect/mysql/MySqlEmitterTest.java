@@ -34,6 +34,8 @@ import org.jiemamy.composer.exporter.SimpleSqlExportConfig;
 import org.jiemamy.dialect.mysql.parameter.MySqlParameterKeys;
 import org.jiemamy.dialect.mysql.parameter.StandardEngine;
 import org.jiemamy.model.column.JmColumnBuilder;
+import org.jiemamy.model.column.SimpleJmColumn;
+import org.jiemamy.model.constraint.SimpleJmPrimaryKeyConstraint;
 import org.jiemamy.model.datatype.RawTypeCategory;
 import org.jiemamy.model.datatype.RawTypeDescriptor;
 import org.jiemamy.model.datatype.SimpleDataType;
@@ -58,13 +60,15 @@ public class MySqlEmitterTest {
 	
 	private static final RawTypeDescriptor VARCHAR = new SimpleRawTypeDescriptor(RawTypeCategory.VARCHAR);
 	
+	private static final RawTypeDescriptor TIMESTAMP = new SimpleRawTypeDescriptor(RawTypeCategory.TIMESTAMP);
+	
 	private MySqlEmitter emitter;
 	
 	private SimpleSqlExportConfig config;
 	
 	private JiemamyContext context;
 	
-
+	
 	/**
 	 * テストを初期化する。
 	 * 
@@ -80,6 +84,77 @@ public class MySqlEmitterTest {
 		config.setEmitDropStatements(true);
 		
 		context = new JiemamyContext(SqlFacet.PROVIDER);
+	}
+	
+	/**
+	 * TODO for daisuke
+	 * 
+	 * @throws Exception 例外が発生した場合
+	 */
+	@Test
+	public void test_DEFAULT句がNULL句の後() throws Exception {
+		SimpleDataType aiInteger = new SimpleDataType(INTEGER);
+		aiInteger.putParam(TypeParameterKey.SERIAL, true);
+		
+		SimpleDataType varchar32 = new SimpleDataType(VARCHAR);
+		varchar32.putParam(TypeParameterKey.SIZE, 32);
+		
+		SimpleDataType timestamp = new SimpleDataType(TIMESTAMP);
+		
+		SimpleJmColumn id = new JmColumnBuilder("ID").type(aiInteger).build();
+		
+		SimpleJmColumn hoge = new JmColumnBuilder("HOGE").type(timestamp).build();
+		hoge.setDefaultValue("2011-10-27 10:53:59");
+		
+		SimpleJmPrimaryKeyConstraint pk = SimpleJmPrimaryKeyConstraint.of(id);
+		
+		// FORMAT-OFF
+		SimpleJmTable table = new JmTableBuilder("T_FOO")
+				.with(id)
+				.with(new JmColumnBuilder("NAME").type(varchar32).build())
+				.with(hoge)
+				.with(pk)
+				.build();
+		// FORMAT-ON
+		context.store(table);
+		
+		List<SqlStatement> statements = emitter.emit(context, config);
+		assertThat(statements.size(), is(2));
+		assertThat(statements.get(0).toString(), is("DROP TABLE IF EXISTS `T_FOO`;"));
+		assertThat(
+				statements.get(1).toString(),
+				is("CREATE TABLE `T_FOO`(`ID` INTEGER AUTO_INCREMENT, `NAME` VARCHAR(32), `HOGE` TIMESTAMP NULL DEFAULT TIMESTAMP '2011-10-27 10:53:59');"));
+	}
+	
+	/**
+	 * TODO for daisuke
+	 * 
+	 * @throws Exception 例外が発生した場合
+	 */
+	@Test
+	public void test_TIMESTAMPにはNULLをつける() throws Exception {
+		SimpleDataType aiInteger = new SimpleDataType(INTEGER);
+		aiInteger.putParam(TypeParameterKey.SERIAL, true);
+		
+		SimpleDataType varchar32 = new SimpleDataType(VARCHAR);
+		varchar32.putParam(TypeParameterKey.SIZE, 32);
+		
+		SimpleDataType timestamp = new SimpleDataType(TIMESTAMP);
+		
+		// FORMAT-OFF
+		SimpleJmTable table = new JmTableBuilder("T_FOO")
+				.with(new JmColumnBuilder("ID").type(aiInteger).build())
+				.with(new JmColumnBuilder("NAME").type(varchar32).build())
+				.with(new JmColumnBuilder("HOGE").type(timestamp).build())
+				.build();
+		// FORMAT-ON
+		context.store(table);
+		
+		List<SqlStatement> statements = emitter.emit(context, config);
+		assertThat(statements.size(), is(2));
+		assertThat(statements.get(0).toString(), is("DROP TABLE IF EXISTS `T_FOO`;"));
+		assertThat(statements.get(1).toString(),
+				is("CREATE TABLE `T_FOO`(`ID` INTEGER AUTO_INCREMENT, `NAME` VARCHAR(32), `HOGE` TIMESTAMP NULL);"));
 	}
 	
 	/**

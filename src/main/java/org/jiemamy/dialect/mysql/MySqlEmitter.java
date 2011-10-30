@@ -34,8 +34,12 @@ import org.jiemamy.dialect.mysql.internal.MySqlIdentifier;
 import org.jiemamy.dialect.mysql.parameter.MySqlParameterKeys;
 import org.jiemamy.dialect.mysql.parameter.StorageEngineType;
 import org.jiemamy.model.DbObject;
+import org.jiemamy.model.column.JmColumn;
+import org.jiemamy.model.constraint.JmNotNullConstraint;
+import org.jiemamy.model.datatype.RawTypeCategory;
 import org.jiemamy.model.sql.Identifier;
 import org.jiemamy.model.sql.Keyword;
+import org.jiemamy.model.sql.Literal;
 import org.jiemamy.model.sql.Separator;
 import org.jiemamy.model.sql.SimpleSqlStatement;
 import org.jiemamy.model.sql.SqlStatement;
@@ -68,6 +72,35 @@ public class MySqlEmitter extends DefaultSqlEmitter {
 	 */
 	protected MySqlEmitter(Dialect dialect, TokenResolver tokenResolver) {
 		super(dialect, tokenResolver);
+	}
+	
+	@Override
+	protected List<Token> emitColumn(JiemamyContext context, JmTable table, JmColumn column, TokenResolver tokenResolver) {
+		List<Token> tokens = Lists.newArrayList();
+		tokens.add(Identifier.of(column.getName()));
+		tokens.addAll(tokenResolver.resolve(column.getDataType()));
+		
+		JmNotNullConstraint nn = table.getNotNullConstraintFor(column.toReference());
+		if (nn == null) {
+			if (column.getDataType().getRawTypeDescriptor().getTypeName().equalsIgnoreCase("TIMESTAMP")) {
+				tokens.add(Keyword.NULL);
+			}
+		} else {
+			if (StringUtils.isEmpty(nn.getName()) == false) {
+				tokens.add(Keyword.CONSTRAINT);
+				tokens.add(Identifier.of(nn.getName()));
+			}
+			tokens.add(Keyword.NOT);
+			tokens.add(Keyword.NULL);
+		}
+		
+		if (StringUtils.isEmpty(column.getDefaultValue()) == false) {
+			RawTypeCategory category = column.getDataType().getRawTypeDescriptor().getCategory();
+			tokens.add(Keyword.DEFAULT);
+			tokens.add(Literal.of(column.getDefaultValue(), category.getLiteralType()));
+		}
+		
+		return tokens;
 	}
 	
 	@Override
