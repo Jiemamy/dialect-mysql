@@ -46,7 +46,7 @@ public class JiemamyMySqlDialectReleaseTest {
 	static final String HEADER = "/* * Copyright 2007-" + Calendar.getInstance().get(Calendar.YEAR)
 			+ " Jiemamy Project and the Others.";
 	
-
+	
 	/**
 	 * fixmeレベルのタスクタグが残っていないこと。
 	 * 

@@ -61,7 +61,7 @@ public final class MySqlParameterKeys {
 				}
 			}, "org.jiemamy.dialect.mysql.storageEngine");
 	
-
+	
 	private MySqlParameterKeys() {
 	}
 }

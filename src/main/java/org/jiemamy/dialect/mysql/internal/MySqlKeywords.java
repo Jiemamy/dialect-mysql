@@ -34,7 +34,7 @@ public final class MySqlKeywords {
 	/** AUTO_INCREMENT */
 	public static final Keyword AUTO_INCREMENT = Keyword.of("AUTO_INCREMENT");
 	
-
+	
 	private MySqlKeywords() {
 	}
 	

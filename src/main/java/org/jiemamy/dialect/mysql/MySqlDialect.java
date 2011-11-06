@@ -156,7 +156,7 @@ public class MySqlDialect extends AbstractDialect {
 		// FORMAT-ON
 	}
 	
-
+	
 	/**
 	 * インスタンスを生成する。
 	 */

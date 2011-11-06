@@ -57,7 +57,7 @@ public class MySqlReservedWordsChecker implements ReservedWordsChecker {
 			"XOR", "YEAR_MONTH", "ZEROFILL", "ACCESSIBLE", "LINEAR", "MASTER_SSL_VERIFY_SERVER_CERT", "RANGE",
 			"READ_ONLY", "READ_WRITE");
 	
-
+	
 	public boolean isReserved(String name) {
 		return RESERVED_WORDS.contains(name);
 	}

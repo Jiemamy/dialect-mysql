@@ -48,7 +48,7 @@ public class MySqlDbObjectImportVisitor extends DefaultDbObjectImportVisitor {
 	
 	private static Logger logger = LoggerFactory.getLogger(MySqlDbObjectImportVisitor.class);
 	
-
+	
 	/**
 	 * インスタンスを生成する。
 	 * 

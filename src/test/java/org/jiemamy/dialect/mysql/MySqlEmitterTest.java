@@ -86,13 +86,9 @@ public class MySqlEmitterTest {
 		context = new JiemamyContext(SqlFacet.PROVIDER);
 	}
 	
-	/**
-	 * TODO for daisuke
-	 * 
-	 * @throws Exception 例外が発生した場合
-	 */
 	@Test
-	public void test_DEFAULT句がNULL句の後() throws Exception {
+	@SuppressWarnings("javadoc")
+	public void test_DEFAULT句がNULL句の後() {
 		SimpleDataType aiInteger = new SimpleDataType(INTEGER);
 		aiInteger.putParam(TypeParameterKey.SERIAL, true);
 		
@@ -126,13 +122,9 @@ public class MySqlEmitterTest {
 				is("CREATE TABLE `T_FOO`(`ID` INTEGER AUTO_INCREMENT, `NAME` VARCHAR(32), `HOGE` TIMESTAMP NULL DEFAULT '2011-10-27 10:53:59', PRIMARY KEY(`ID`));"));
 	}
 	
-	/**
-	 * TODO for daisuke
-	 * 
-	 * @throws Exception 例外が発生した場合
-	 */
 	@Test
-	public void test_TIMESTAMPにはNULLをつける() throws Exception {
+	@SuppressWarnings("javadoc")
+	public void test_TIMESTAMPにはNULLをつける() {
 		SimpleDataType aiInteger = new SimpleDataType(INTEGER);
 		aiInteger.putParam(TypeParameterKey.SERIAL, true);
 		
