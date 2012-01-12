@@ -119,8 +119,8 @@ public class MySqlDialect extends AbstractDialect {
 				}}));
 		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(DOUBLE),
 				new HashMap<TypeParameterKey<?>, Necessity>() {{
-						put(TypeParameterKey.PRECISION, Necessity.REQUIRED);
-						put(TypeParameterKey.SCALE, Necessity.REQUIRED);
+						put(TypeParameterKey.PRECISION, Necessity.OPTIONAL);
+						put(TypeParameterKey.SCALE, Necessity.OPTIONAL);
 						put(MySqlParameterKeys.UNSIGNED, Necessity.OPTIONAL);
 				}}));
 		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(BIT),
