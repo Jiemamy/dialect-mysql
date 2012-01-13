@@ -8,7 +8,7 @@
   </parent>
   <artifactId>jiemamy-dialect-mysql</artifactId>
   <name>Jiemamy Dialect for MySQL</name>
-  <version>0.3.3</version>
+  <version>0.3.4-SNAPSHOT</version>
   <description><![CDATA[MySQLに対するSQL方言コンポーネント。]]></description>
   <issueManagement>
     <system>JIRA</system>
@@ -37,9 +37,9 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:svn:http://svn.jiemamy.org/products/hermes/mysql/coreapi/tags/jiemamy-dialect-mysql-0.3.3</connection>
-    <developerConnection>scm:svn:http://svn.jiemamy.org/products/hermes/mysql/coreapi/tags/jiemamy-dialect-mysql-0.3.3</developerConnection>
-    <url>http://fisheye.jiemamy.org/browse/hermes/mysql/coreapi/tags/jiemamy-dialect-mysql-0.3.3</url>
+    <connection>scm:svn:http://svn.jiemamy.org/products/hermes/mysql/coreapi/trunk</connection>
+    <developerConnection>scm:svn:http://svn.jiemamy.org/products/hermes/mysql/coreapi/trunk</developerConnection>
+    <url>http://fisheye.jiemamy.org/browse/hermes/mysql/coreapi/trunk</url>
   </scm>
   <build>
     <plugins>
