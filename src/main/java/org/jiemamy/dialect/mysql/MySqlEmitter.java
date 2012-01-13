@@ -26,6 +26,7 @@ import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 
 import org.jiemamy.JiemamyContext;
+import org.jiemamy.dddbase.UUIDEntityRef;
 import org.jiemamy.dialect.DefaultSqlEmitter;
 import org.jiemamy.dialect.Dialect;
 import org.jiemamy.dialect.SqlEmitter;
@@ -80,7 +81,8 @@ public class MySqlEmitter extends DefaultSqlEmitter {
 		tokens.add(Identifier.of(column.getName()));
 		tokens.addAll(tokenResolver.resolve(column.getDataType()));
 		
-		JmNotNullConstraint nn = table.getNotNullConstraintFor(column.toReference());
+		UUIDEntityRef<? extends JmColumn> ref = column.toReference();
+		JmNotNullConstraint nn = table.getNotNullConstraintFor(ref);
 		if (nn == null) {
 			if (column.getDataType().getRawTypeDescriptor().getTypeName().equalsIgnoreCase("TIMESTAMP")) {
 				tokens.add(Keyword.NULL);
