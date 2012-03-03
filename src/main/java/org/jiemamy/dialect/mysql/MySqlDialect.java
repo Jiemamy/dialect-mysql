@@ -149,7 +149,10 @@ public class MySqlDialect extends AbstractDialect {
 		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(TIMESTAMP, "DATETIME")));
 		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(INTEGER, "YEAR")));
 		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(OTHER, "BINARY")));
-		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(OTHER, "VARBINARY")));
+		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(OTHER, "VARBINARY"),
+				new HashMap<TypeParameterKey<?>, Necessity>() {{
+						put(TypeParameterKey.SIZE, Necessity.REQUIRED);
+				}}));
 		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(OTHER, "ENUM")));
 		typeEntries.add(new Entry(new SimpleRawTypeDescriptor(OTHER, "SET")));
 		// CHECKSTYLE:ON
