@@ -34,8 +34,8 @@ import org.jiemamy.composer.exporter.SimpleSqlExportConfig;
 import org.jiemamy.dialect.mysql.parameter.MySqlParameterKeys;
 import org.jiemamy.dialect.mysql.parameter.StandardEngine;
 import org.jiemamy.model.column.JmColumnBuilder;
-import org.jiemamy.model.column.SimpleJmColumn;
-import org.jiemamy.model.constraint.SimpleJmPrimaryKeyConstraint;
+import org.jiemamy.model.column.JmColumn;
+import org.jiemamy.model.constraint.JmPrimaryKeyConstraint;
 import org.jiemamy.model.datatype.RawTypeCategory;
 import org.jiemamy.model.datatype.RawTypeDescriptor;
 import org.jiemamy.model.datatype.SimpleDataType;
@@ -43,7 +43,7 @@ import org.jiemamy.model.datatype.SimpleRawTypeDescriptor;
 import org.jiemamy.model.datatype.TypeParameterKey;
 import org.jiemamy.model.sql.SqlStatement;
 import org.jiemamy.model.table.JmTableBuilder;
-import org.jiemamy.model.table.SimpleJmTable;
+import org.jiemamy.model.table.JmTable;
 
 /**
  * {@link MySqlEmitter}のテストクラス。
@@ -97,15 +97,15 @@ public class MySqlEmitterTest {
 		
 		SimpleDataType timestamp = new SimpleDataType(TIMESTAMP);
 		
-		SimpleJmColumn id = new JmColumnBuilder("ID").type(aiInteger).build();
+		JmColumn id = new JmColumnBuilder("ID").type(aiInteger).build();
 		
-		SimpleJmColumn hoge = new JmColumnBuilder("HOGE").type(timestamp).build();
+		JmColumn hoge = new JmColumnBuilder("HOGE").type(timestamp).build();
 		hoge.setDefaultValue("'2011-10-27 10:53:59'");
 		
-		SimpleJmPrimaryKeyConstraint pk = SimpleJmPrimaryKeyConstraint.of(id);
+		JmPrimaryKeyConstraint pk = JmPrimaryKeyConstraint.of(id);
 		
 		// FORMAT-OFF
-		SimpleJmTable table = new JmTableBuilder("T_FOO")
+		JmTable table = new JmTableBuilder("T_FOO")
 				.with(id)
 				.with(new JmColumnBuilder("NAME").type(varchar32).build())
 				.with(hoge)
@@ -134,7 +134,7 @@ public class MySqlEmitterTest {
 		SimpleDataType timestamp = new SimpleDataType(TIMESTAMP);
 		
 		// FORMAT-OFF
-		SimpleJmTable table = new JmTableBuilder("T_FOO")
+		JmTable table = new JmTableBuilder("T_FOO")
 				.with(new JmColumnBuilder("ID").type(aiInteger).build())
 				.with(new JmColumnBuilder("NAME").type(varchar32).build())
 				.with(new JmColumnBuilder("HOGE").type(timestamp).build())
@@ -174,7 +174,7 @@ public class MySqlEmitterTest {
 		aiInteger.putParam(TypeParameterKey.SERIAL, true);
 		
 		// FORMAT-OFF
-		SimpleJmTable table = new JmTableBuilder("T_FOO")
+		JmTable table = new JmTableBuilder("T_FOO")
 				.with(new JmColumnBuilder("ID").type(aiInteger).build())
 				.with(new JmColumnBuilder("NAME").type(varchar32).build())
 				.with(new JmColumnBuilder("HOGE").type(new SimpleDataType(INTEGER)).build())
@@ -203,7 +203,7 @@ public class MySqlEmitterTest {
 		aiInteger.putParam(TypeParameterKey.SERIAL, true);
 		
 		// FORMAT-OFF
-		SimpleJmTable table = new JmTableBuilder("T_FOO")
+		JmTable table = new JmTableBuilder("T_FOO")
 				.with(new JmColumnBuilder("ID").type(aiInteger).build())
 				.with(new JmColumnBuilder("NAME").type(varchar32).build())
 				.with(new JmColumnBuilder("HOGE").type(new SimpleDataType(INTEGER)).build())

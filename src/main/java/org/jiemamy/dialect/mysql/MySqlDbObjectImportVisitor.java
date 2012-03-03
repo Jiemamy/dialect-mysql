@@ -34,8 +34,8 @@ import org.jiemamy.dialect.mysql.parameter.MySqlParameterKeys;
 import org.jiemamy.dialect.mysql.parameter.StandardEngine;
 import org.jiemamy.dialect.mysql.parameter.StorageEngineType;
 import org.jiemamy.model.DbObject;
-import org.jiemamy.model.SimpleDbObject;
-import org.jiemamy.model.view.SimpleJmView;
+import org.jiemamy.model.DbObject;
+import org.jiemamy.model.view.JmView;
 import org.jiemamy.utils.sql.metadata.TableMeta;
 
 /**
@@ -61,7 +61,7 @@ public class MySqlDbObjectImportVisitor extends DefaultDbObjectImportVisitor {
 	
 	@Override
 	protected DbObject createDbObject(TableMeta tableMeta) throws SQLException {
-		SimpleDbObject dbObject = (SimpleDbObject) super.createDbObject(tableMeta);
+		DbObject dbObject = (DbObject) super.createDbObject(tableMeta);
 		
 		try {
 			Connection connection = getMeta().getMetaData().getConnection();
@@ -91,10 +91,10 @@ public class MySqlDbObjectImportVisitor extends DefaultDbObjectImportVisitor {
 	}
 	
 	@Override
-	protected SimpleJmView createView(String viewName) throws SQLException {
+	protected JmView createView(String viewName) throws SQLException {
 		Validate.notNull(viewName);
 		
-		SimpleJmView view = new SimpleJmView();
+		JmView view = new JmView();
 		view.setName(viewName);
 		
 		try {

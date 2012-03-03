@@ -26,7 +26,6 @@ import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 
 import org.jiemamy.JiemamyContext;
-import org.jiemamy.dddbase.UUIDEntityRef;
 import org.jiemamy.dialect.DefaultSqlEmitter;
 import org.jiemamy.dialect.Dialect;
 import org.jiemamy.dialect.SqlEmitter;
@@ -36,7 +35,6 @@ import org.jiemamy.dialect.mysql.parameter.MySqlParameterKeys;
 import org.jiemamy.dialect.mysql.parameter.StorageEngineType;
 import org.jiemamy.model.DbObject;
 import org.jiemamy.model.column.JmColumn;
-import org.jiemamy.model.constraint.JmNotNullConstraint;
 import org.jiemamy.model.datatype.LiteralType;
 import org.jiemamy.model.sql.Identifier;
 import org.jiemamy.model.sql.Keyword;
@@ -81,19 +79,13 @@ public class MySqlEmitter extends DefaultSqlEmitter {
 		tokens.add(Identifier.of(column.getName()));
 		tokens.addAll(tokenResolver.resolve(column.getDataType()));
 		
-		UUIDEntityRef<? extends JmColumn> ref = column.toReference();
-		JmNotNullConstraint nn = table.getNotNullConstraintFor(ref);
-		if (nn == null) {
+		if (column.isNotNull()) {
+			tokens.add(Keyword.NOT);
+			tokens.add(Keyword.NULL);
+		} else {
 			if (column.getDataType().getRawTypeDescriptor().getTypeName().equalsIgnoreCase("TIMESTAMP")) {
 				tokens.add(Keyword.NULL);
 			}
-		} else {
-			if (StringUtils.isEmpty(nn.getName()) == false) {
-				tokens.add(Keyword.CONSTRAINT);
-				tokens.add(Identifier.of(nn.getName()));
-			}
-			tokens.add(Keyword.NOT);
-			tokens.add(Keyword.NULL);
 		}
 		
 		if (StringUtils.isEmpty(column.getDefaultValue()) == false) {
