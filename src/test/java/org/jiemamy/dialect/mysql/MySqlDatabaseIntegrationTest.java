@@ -179,13 +179,13 @@ public class MySqlDatabaseIntegrationTest extends MySqlDatabaseTest {
 					.with(new JmColumnBuilder("HOGE").type(new SimpleDataType(INTEGER)).build())
 					.build();
 			// FORMAT-ON
-			table.store(JmPrimaryKeyConstraint.of(table.getColumn("ID")));
-			context.store(table);
+			table.add(JmPrimaryKeyConstraint.of(table.getColumn("ID")));
+			context.add(table);
 			
 			JmView view = new JmView();
 			view.setName("V_BAR");
 			view.setDefinition(VIEW_DEFINITION);
-			context.store(view);
+			context.add(view);
 		}
 		
 		File outFile = new File("target/testresult/MySqlDatabaseTest_test04.sql");
@@ -255,8 +255,8 @@ public class MySqlDatabaseIntegrationTest extends MySqlDatabaseTest {
 				.build();
 		// FORMAT-ON
 		foo.putParam(MySqlParameterKeys.STORAGE_ENGINE, StandardEngine.InnoDB);
-		foo.store(JmPrimaryKeyConstraint.of(foo.getColumn("ID")));
-		context.store(foo);
+		foo.add(JmPrimaryKeyConstraint.of(foo.getColumn("ID")));
+		context.add(foo);
 		
 		// FORMAT-OFF
 		JmTable bar = new JmTableBuilder("T_BAR")
@@ -265,9 +265,9 @@ public class MySqlDatabaseIntegrationTest extends MySqlDatabaseTest {
 				.with(new JmColumnBuilder("FUGA").type(new SimpleDataType(INTEGER)).build())
 				.build();
 		// FORMAT-ON
-		bar.store(JmPrimaryKeyConstraint.of(bar.getColumn("ID")));
+		bar.add(JmPrimaryKeyConstraint.of(bar.getColumn("ID")));
 		bar.putParam(MySqlParameterKeys.STORAGE_ENGINE, StandardEngine.MyISAM);
-		context.store(bar);
+		context.add(bar);
 		
 		File outFile = new File("target/testresult/MySqlDatabaseTest_test03.sql");
 		SimpleSqlExportConfig config = new SimpleSqlExportConfig();

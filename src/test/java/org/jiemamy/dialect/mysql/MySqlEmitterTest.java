@@ -112,7 +112,7 @@ public class MySqlEmitterTest {
 				.with(pk)
 				.build();
 		// FORMAT-ON
-		context.store(table);
+		context.add(table);
 		
 		List<SqlStatement> statements = emitter.emit(context, config);
 		assertThat(statements.size(), is(2));
@@ -140,7 +140,7 @@ public class MySqlEmitterTest {
 				.with(new JmColumnBuilder("HOGE").type(timestamp).build())
 				.build();
 		// FORMAT-ON
-		context.store(table);
+		context.add(table);
 		
 		List<SqlStatement> statements = emitter.emit(context, config);
 		assertThat(statements.size(), is(2));
@@ -180,7 +180,7 @@ public class MySqlEmitterTest {
 				.with(new JmColumnBuilder("HOGE").type(new SimpleDataType(INTEGER)).build())
 				.build();
 		// FORMAT-ON
-		context.store(table);
+		context.add(table);
 		
 		List<SqlStatement> statements = emitter.emit(context, config);
 		assertThat(statements.size(), is(2));
@@ -210,7 +210,7 @@ public class MySqlEmitterTest {
 				.build();
 		// FORMAT-ON
 		table.putParam(MySqlParameterKeys.STORAGE_ENGINE, StandardEngine.InnoDB);
-		context.store(table);
+		context.add(table);
 		
 		List<SqlStatement> statements = emitter.emit(context, config);
 		assertThat(statements.size(), is(2));
